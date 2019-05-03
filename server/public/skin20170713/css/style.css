@@ -1,0 +1,265 @@
+@charset "gb2312";
+/* CSS Document */
+/* 默认样式 */
+html{font-family:sans-serif; -ms-text-size-adjust:100%; -webkit-text-size-adjust:100%;-ms-touch-action: none;}
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;font:inherit;font-size:100%;vertical-align:baseline;font-family:sans-serif;} 
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}
+table{border-collapse:collapse;border-spacing:0;}
+fieldset,img{border:0;}
+address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}
+ol,ul,li{list-style:none;}
+caption,th{text-align:left;}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:bold;color:#000;}
+input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}
+body{line-height:1;}
+table{font-size:inherit;font:100%;}
+a,button{cursor:pointer;}
+/**********defined************/
+body { font-size:16px; color:#333333;font-family:"hiragino sans gb",Microsoft YaHei,Arial,sans-serif;line-height:24px; background:#f4f4f4;-webkit-text-size-adjust: none;-moz-text-size-adjust:none; -ms-text-size-adjust: none;text-size-adjust: none;}
+h1, h2 { font-weight:bold; color:#333;}
+h1, h2, h3, h4, h5, h6, p { line-height:1.2em; font-size:100%;}
+p{line-height:24px;}
+h1{ font-size:18px;}
+h2{ font-size:16px;}
+h3, h4, h5, h6{ font-size:14px;}
+a {color: #111111; text-decoration:none;}
+a:link {text-decoration:none;} 
+a:hover  { colo 0 r: #e00; text-decoration:none;}
+.cl:after,.clear_fix:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.cl,.clear_fix{zoom:1;}
+.tr:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.tr{zoom:1;}
+.m-5{ margin-top:5px;}
+.m-10{ margin-top:10px;}
+.m-15{ margin-top:15px;}
+.p10{ padding:10px;}
+.l{ float:left;}
+.r{ float:right;}
+.block{ display:block;}
+
+.all{ max-width:768px; margin:0 auto}
+.tophead{ height:44px; background:#1c1c20; padding:0 10px}
+.tophead .logo{ width:164px; float:left}
+.tophead .logo img{ width:164px; height:40px; display:block; margin-top:2px}
+.sort{height:44px; line-height:44px; font-size:0.3rem;display:block; color:#FFF}
+.down a{ font-size:14px; line-height:44px; color:#f4f4f4; background:url(../images/ico_down.png) 0 2.5px no-repeat; background-size:14px 14px; padding-left:20px; vertical-align:middle}
+.pinglun{ width:62px; height:25px; background:url(../images/pinglun.png) 0 0 no-repeat; background-size:62px 25px; text-align:center; font-size:12px; color:#FFF; line-height:25px; margin-top:9px}
+.dnav{ height:1.5rem; background:#FFF; overflow:hidden}
+.dnav li{ line-height:0.75rem; float:left; width:25%; text-align:center; font-size:0.3rem;}
+.dnav li span{ border-right:#e9e9e9 solid 1px; border-bottom:#e9e9e9 solid 1px; display:block}
+.dnav li a{ color:#31424e}
+
+.tabBox .hd{ height:50px; line-height:50px; background:#FFF;z-index:100; width:94.66%; padding:0 2.6%}
+.tabBox .hd li{ float:left; width:50%; text-align:center; font-size:0.3rem}
+.tabBox .hd li a{ color:#111111}
+.tabBox .hd li.on{ background:url(../images/li_on.png) center 38px no-repeat; background-size:80%}
+.topimg{ width:100%; position:relative}
+.topimg .mask {	position: absolute;	z-index: 2;	bottom: 0; left: 0; width: 100%; height: 100%;
+background-color: rgba(0,0,0,.7);
+background: -webkit-gradient(linear,left bottom,left top,color-stop(10%,rgba(0,0,0,.7)),color-stop(75%,rgba(0,0,0,.0))) !important;
+background: -webkit-linear-gradient(90deg,rgba(0,0,0,.7) 10%,rgba(0,0,0,.0) 75%) !important;
+background: linear-gradient(0deg,rgba(0,0,0,.7) 10%,rgba(0,0,0,.0) 75%) !important;}
+.topimg img{ width:100%; display:block}
+.topimg .titleWrap { position: absolute; z-index: 3; bottom: 5px; width: 95%; margin-left:2.5%;}
+.topimg h1 { text-shadow:1px 1px 2px #000;}
+.topimg span { text-shadow:1px 1px 2px #000;}
+.swiper-c2 img{width:100%; display:block;}
+.swiper-c2 .swiper-lazy-preloader{ margin-top:70px;}
+.topimg h1{ font-size:0.4rem; line-height:30px; color:#FFF; left:0; bottom:30px; position:absolute; padding:0 10px}
+.topimg span{ font-size:12px; line-height:22px; color:#b2b2b2; right:10px; bottom:5px; position:absolute}
+.topimg i{ font-size:12px; line-height:22px; color:#b2b2b2; left:10px; bottom:5px; position:absolute}
+.navbox{background:url(../images/png.png) 0 3px no-repeat; background-size:100%;padding:20px 10px 15px 10px}
+.navbox li{ width:25%; float:left}
+.navbox li span{ display:block; padding:0 5px}
+.navbox li img{ width:100%; display:block}
+
+.newsbox{ background:#FFF; border-bottom:#e8e8e8 solid 1px; border-top:#e8e8e8 solid 1px; padding:15px 10px}
+.title{ height:30px; line-height:30px}
+.title h2{ font-size:16px; line-height:30px; background:url(../images/ico_h2.png) 0 8px no-repeat; background-size:4.5px 13.5px; padding-left:10px; font-weight:normal}
+.newscon dl{ height:72px; padding:10px 0; border-bottom:#e9e9e9 solid 1px}
+.newscon dl dt{ width:100px; float:left; margin-right:10px}
+.newscon dl dt img{ width:100px; height:72px; display:block; border-radius:5px}
+.newscon dl dd h4{ font-size:0.3rem; line-height:22px; height:44px; overflow:hidden; font-weight:normal; color:#31424e}
+.newscon dl dd span{ }
+.newscon dl dd .xw{ width:40px; height:18px; background:url(../images/xw.png) 0 0 no-repeat; background-size:40px 18px; display:block; overflow:hidden; text-indent:-9999px}
+.newscon dl dd .sp{ width:40px; height:18px; background:url(../images/sp.png) 0 0 no-repeat; background-size:40px 18px; display:block;  overflow:hidden;  text-indent:-9999px}
+.newscon dl dd .zb{ width:40px; height:18px; background:url(../images/zb.png) 0 0 no-repeat; background-size:40px 18px; display:block; overflow:hidden; text-indent:-9999px}
+.newscon dl dd .zatan{ width:40px; height:18px; background:url(../images/zt.png) 0 0 no-repeat; background-size:40px 18px; display:block; overflow:hidden; text-indent:-9999px}
+.newscon dl dd .cf{ width:40px; height:18px; background:url(../images/cf.png) 0 0 no-repeat; background-size:40px 18px; display:block; overflow:hidden; text-indent:-9999px}
+.newscon dl dd .tp{ width:40px; height:18px; background:url(../images/ts.png) 0 0 no-repeat; background-size:40px 18px; display:block; overflow:hidden; text-indent:-9999px}
+.newscon dl dd .ss{ width:40px; height:18px; background:url(../images/ss.png) 0 0 no-repeat; background-size:40px 18px; display:block; overflow:hidden; text-indent:-9999px}
+.newscon dl dd .xs{ width:40px; height:18px; background:url(../images/xs.png) 0 0 no-repeat; background-size:40px 18px; display:block; overflow:hidden; text-indent:-9999px}
+.newscon dl dd .gl{ width:40px; height:18px; background:url(../images/gl.png) 0 0 no-repeat; background-size:40px 18px; display:block; overflow:hidden; text-indent:-9999px}
+.newscon dl dd .zhuant{ width:40px; height:18px; background:url(../images/zhuanti.png) 0 0 no-repeat; background-size:40px 18px; display:block; overflow:hidden; text-indent:-9999px}
+dl dd .comment{ color:#b3bec7; background:url(../images/ico_comment.png) 0 0 no-repeat; background-size:18px 16px; padding-left:24px; line-height:16px; font-size:10px}
+dl dd .time{ color:#b3bec7; background-size:15px 15px; display:block; padding-left:20px; position:relative; top:-14px;line-height:12px;  font-size:12px}
+dl dd .hits{ color:#b3bec7; background:url(../images/ico_hit.png) 0 2.5px no-repeat; background-size:20px 13px; padding-left:25px; line-height:18px; font-size:10px}
+
+.checkbox{ background:url(../images/png.png) 0 3px #fff no-repeat; background-size:100%; padding:20px 10px 10px 10px}
+.check dl{ line-height:30px; font-size:0.26rem; margin-top:8px}
+.check dl dt{ height:30px; width:50px; background:#e8e8e8;text-align:center; color:#666666; border-radius:5px; float:left; font-size:0.26rem}
+.check dl dd a{ padding:0 9px; color:#000000}
+.check dl dd a.this,.check dl dd a:hover{ color:#3b78ce}
+.othercheck{ display:none; background:#FFF; padding:0 0 10px 0}
+.othercheck.on{ display:block}
+.drop img{ width:100%; display:block}
+
+.video{ background:#FFF; padding:10px; margin-top:10px}
+.video dl{ height:72px; padding:10px 0; border-bottom:#e9e9e9 solid 1px}
+.video dl dt{ width:100px; height:72px; position:relative; float:left; margin-right:10px}
+.video dl dt img{ width:100px; height:72px; display:block; border-radius:5px}
+.video dl dt i{ position:absolute; right:0; bottom:0; font-size:12px; line-height:18px; text-indent:65px;color:#FFF; background:url(../images/i.png) 0 0 no-repeat; background-size:100px 18px; display:block; width:100px; height:18px; border-radius:0 0 5px 5px}
+.video dl dd h4{ font-size:0.3rem; line-height:22px; height:44px; overflow:hidden; font-weight:normal; color:#31424e}
+.video dl dd span{ line-height:18px; font-size:0.26rem; color:#b3bec7}
+.star5{ background:url(../images/star.png) 0 0 no-repeat; width:83px; height:14px; display:inline-block;}
+.star4{ background:url(../images/star.png) 0 -14px no-repeat; width:83px; height:14px; display:inline-block;}
+.star3{ background:url(../images/star.png) 0 -28px no-repeat; width:83px; height:14px; display:inline-block;}
+.star2{ background:url(../images/star.png) 0 -36px no-repeat; width:83px; height:14px; display:inline-block;}
+.star1{ background:url(../images/star.png) 0 -60px no-repeat; width:83px; height:14px; display:inline-block;}
+
+
+.event{ background:#FFF; border-bottom:1px solid #E5E5E5;}
+.event_list{ text-align:center; background:#FFF;}
+.event_list .cl{ position:relative; padding:20px 10px; border-top:1px solid #E5E5E5;}
+.event_list h4{ font-size:17px; font-weight:normal; line-height:24px; height:24px; overflow:hidden;}
+.event_list .date{ font-size:15px; color:#999999; display:block; line-height:20px; margin-top:3px;}
+.event_list .abs img{ border-radius:50%; width:60px; height:60px; display:block;}
+.event_list .abs p{ font-size:14px; margin-top:8px; line-height:18px; height:18px; overflow:hidden; color:#333333}
+.abs_lef{ left:10px; top:18px;}
+.abs_rig{ right:10px; top:18px;}
+.abs{ position:absolute;}
+.event_top .cl{ border-bottom:none;}
+.event_top h3{ font-size:14px;line-height:22px; height:22px;color:#666666; margin-bottom:5px; font-weight:normal}
+.event_top h4{ font-size:24px;line-height:24px; height:24px;color:#990000; margin-bottom:5px;}
+.starting{ font-size:15px; border-radius:15px; display:inline; padding:1px 10px; margin-top:3px;}
+.s1{border:1px solid #30AB30; color:#fff; background:#30AB30;}/*正在进行*/
+.s2{border:1px solid #ff4646; color:#fff; background:#ff4646;}/*不知道*/
+.s3{border:1px solid #AFAFAF; color:#fff; background:#AFAFAF;}/*已结束*/
+.s4{border:1px solid #38AFD6; color:#fff; background:#38AFD6;}/*未开始*/
+
+.evevt_tab{ width:255px;height:36px; margin:0 auto; padding:15px 0;}
+.evevt_tab a{ width:125px; height:36px;display:block; background:#e5e6e7; text-align:center; line-height:36px; border-radius:20px}
+.evevt_tab a.this{ background:#3b78ce; color:#FFF}
+
+.bbsbox{ background:url(../images/png.png) 0 3px #f4f4f4 no-repeat; background-size:100%; padding:20px 0 0 0}
+.bbstit{ border-bottom:#e8e8e8 solid 1px; padding:0 10px}
+.bbstit h2{ font-size:14px; line-height:30px; color:#000000; font-weight:normal}
+.bbstit h2 a{ color:#fa6f19}
+.bbscon{background:#FFF; overflow:hidden}
+.bbscon dl{border-bottom:#E5E5E5 solid 1px; padding:20px 1%; overflow:hidden}
+.bbscon dl dt{ width:8.6%; float:left; margin-right:3%; overflow:hidden}
+.bbscon dl dt img{ width:100%; display:block; border-radius:50%}
+.bbscon dl dd{ width:86%; float:left; overflow:hidden;}
+.bbscon dl dd h4{ font-size:12px; line-height:20px; color:#999999; font-weight:normal}
+.bbscon dl dd p{ font-size:14px; line-height:20px;color:#333333;white-space:nowrap;text-overflow:ellipsis;overflow: hidden}
+.bbscon dl dd img{ width:100%; display:block; padding:10px 0}
+.bbscon dl dd span{ font-size:12px; line-height:16px; color:#999999}
+
+
+.detail{font-size:16px;padding:10px; background:#ffffff; border-bottom:#e8e8e8 solid 1px}
+.detail h1{font-size:0.4rem; display:block; line-height:32px; color:#333; text-align:left;font-weight:bold; font-family:"Microsoft Yahei","黑体"; border:0px;}
+.detail h4 { font-size:16px; font-weight:normal; padding:10px 0px; color:#AAAAAA; text-align:left;}
+.textdetail{ padding:0px 5px;color:#1E3044;}
+.textdetail p{ line-height:0.6rem; padding-bottom:8px; font-size:0.3rem; margin-top:15px; margin-bottom:15px; text-indent:0; color:#555;}
+.textdetail p strong { font-weight:bold;}
+.textdetail img{ margin-bottom:10px; max-width:100%!important; height:auto!important; display:block; margin:0 auto; margin-bottom:10px;}
+
+.khdbox{ padding:20px 0; width:72%; margin:0 auto}
+.khdbox img{ width:100%; display:block}
+
+.arrow{ width:116px; margin:0 auto; padding:15px 0}
+.arrow a{ width:38px;}
+.arrow a img{ width:38px; height:38px; display:block}
+.footer{ background:#1c1c20; padding:30px 0; text-align:center}
+.footer_down{ width:192px; margin:0 auto}
+.footer_down img{ width:192px; height:53px; display:block}
+.footer_logo{ width:208px; margin:0 auto}
+.footer_logo img{ width:208px; height:33px; display:block}
+.copyright{ padding:15px 0}
+.copyright p{ font-size:12px; line-height:24px}
+.copyright p a{ color:#92989c; padding:0 8px}
+
+
+.vmore{ padding:10px;}
+.vmore a{ border:1px solid #d7d7d7; border-radius:5px;background: -webkit-linear-gradient(#f0f0f0, #e9e9e9, #e2e2e2); display:block; text-align:center; height:34px; line-height:34px;}
+   /*评论*/
+.form_comment{ padding:5px}
+.comment_textarea{ width:96%; margin:0 auto;height:94px; color:#888888; padding:5px; background:url(http://newcomment.uuu9.com/MobileComment/Template/img/commentbg.jpg) center no-repeat #f5f5f5; border:1px solid #c5c5c5; font-size:14px; line-height:20px; overflow:auto; border-radius:5px}
+.comment_publish{width:70px; float:right;font-size:18px; text-align:center; line-height:28px; height:28px;}
+.comment_publish a{ display:block;background:#f07801; color:#fff; border-radius:3px; border:1px solid #d55a00}
+.comment_publish a:hover{ color:#ff0}
+.comment_box{ font-size:15px; padding:10px; padding-bottom:0px; background:#fff}
+.comment_box dl{ padding-bottom:10px; margin-bottom:10px; border-bottom:1px solid #dfdfdf;}
+.comment_box dl p{ line-height:20px;}
+.comment_box .com_tit{ color:#999; padding-bottom:3px; height:24px; line-height:24px; overflow:hidden}
+.comment_box .com_tit em{ float:right}
+.comment_box .replay_r{ float:right}
+.comment_box .replay_r .replay{ background:url(http://newcomment.uuu9.com/MobileComment/Template/img/replaybg.png) 0 center no-repeat}
+.comment_box .replay_r .see{ background:url(http://newcomment.uuu9.com/MobileComment/Template/img/seebg.png) 0 center no-repeat}
+.comment_box .replay_r a{ margin-left:10px; padding-left:20px}
+.com_login li{ float:left; height:30px; overflow:hidden; font-size:14px}
+.com_login .com_fac{ width:60px; border:1px solid #cbcbcb; background:#f2f2f2; height:16px; line-height:16px;overflow:hidden; padding:6px 5px; color:#888888; margin-right:5px; font-size:14px}
+.com_login .com_yzmimg{ position:relative; top:0px; cursor:pointer}
+.com_login .com_log{ border:1px solid #bababa;width:60px; text-align:center;background:url(http://newcomment.uuu9.com/MobileComment/Template/images/butbg.jpg) 0 0 repeat-x; height:24px; line-height:24px;overflow:hidden; display:block; color:#656565; text-decoration:none; position:relative;top:1px}
+.comment_t{ font-size:16px; padding:6px 5px 0px; font-weight:bold}
+.pngbox{ background:url(http://newcomment.uuu9.com/MobileComment/Template/img/png.png) 0 0 repeat; width:100%; height:100%; position:fixed; top:0; left:0;}
+.fc_comment{ position:fixed; top:50px; left:50%; margin-left:-150px; border-radius:10px; z-index:99999; width:300px;}
+.fc_comment .comment_box{ border-radius:10px; padding-bottom:6px}
+.closebg{ position:relative; height:12px}
+.closebg a{width:12px; height:12px; display:block;background:url(http://newcomment.uuu9.com/MobileComment/Template/img/closebg.gif) 0 0 repeat; text-indent:-999em; position:absolute; right:0px}
+.login_box{ padding:10px}
+.login_box li{ padding:5px}
+.login_box .log_fac{ border:1px solid #cccccc; background:#f0f0f0; height:16px; line-height:16px; padding:10px 0px; border-radius:3px; width:100%; font-size:14px; color:#666666; text-indent:8px}
+.login_box .log_but{ border:1px solid #d55a00; background:#f07801; height:34px; line-height:34px; color:#fff; width:100%; display:block; font-size:16px; text-align:center;border-radius:3px;}
+.login_box .log_but:hover{ color:#ff0; text-decoration:none; background:#ff7f00;}
+.fc_top{ color:#fff; line-height:20px; font-size:14px;position:absolute; background:#2d2d2d; z-index:9999999; width:100%}
+.fc_top .top_arrow{background:url(http://newcomment.uuu9.com/MobileComment/Template/img/arrow.gif) 0px 0px no-repeat; position:absolute; top:-5px; right:17px; width:9px; height:5px; display:block}
+.fc_top p{ padding:8px}
+.fc_top a{ color:#fff}
+.fc_top a:hover{ color:#fc0; text-decoration:none}
+.vswmore{ padding-top:10px}
+.vswmore a{ width:180px; height:26px; line-height:26px; display:block; text-align:center; background:#ececec; border:1px solid #d6d6d6; color:#555555; margin:0 auto; border-radius:15px; font-size:16px}
+.vswmore a:hover{ color:#e00}
+/*title*/
+.title em{ float:right; color:#ff4e00; font-size:14px; line-height:30px; padding-right:10px}
+.title em a{ color:#ff4e00; padding:0px 3px}
+.title em a:hover{ color:#e00;}
+.mposition{ font-size:15px; background:url(../images/home.png) 10px center no-repeat #1b1b1b; background-size:18px 18px; text-indent:36px; height:48px; line-height:48px; overflow:hidden;color:#fff;}
+.mposition a{ color:#fff;}
+.mposition a:hover{ color:#f60;}
+
+
+
+@media (min-width:768px){
+.tophead{ height:88px; background:#1c1c20; padding:0 20px}
+.tophead .logo{ width:318px; float:left}
+.tophead .logo img{ width:318px; height:80px; display:block; margin-top:4px}
+.down a{ font-size:20px; line-height:88px; color:#f4f4f4; background:url(../images/ico_down.png) 0 -5px no-repeat; background-size:28px 28px;padding-left:40px; vertical-align:middle}
+.pinglun{ width:124px; height:50px; background:url(../images/pinglun.png) 0 0 no-repeat; background-size:124px 50px; text-align:center; font-size:24px; color:#FFF; line-height:50px; margin-top:18px}
+.sort{ line-height:88px; font-size:0.3rem;}
+.tabBox .hd{ height:100px; line-height:100px; background:#FFF;}
+.tabBox .hd li.on{ background:url(../images/li_on.png) 0 36px no-repeat; background-size:100%}
+.newsbox{padding:30px 20px}
+.title{ height:60px; line-height:60px}
+.title h2{ font-size:32px; line-height:60px; background:url(../images/ico_h2.png) 0 16px no-repeat;padding-left:20px;}
+.newscon dl{ height:144px; padding:20px 0; border-bottom:#e9e9e9 solid 1px}
+.newscon dl dt{ width:200px; float:left; margin-right:20px}
+.newscon dl dt img{ width:200px; height:144px; display:block; border-radius:10px}
+.newscon dl dd h4{ font-size:0.3rem; line-height:44px; height:88px; overflow:hidden; font-weight:normal; color:#31424e}
+.newscon dl dd span{ line-height:36px; font-size:0.26rem; color:#b3bec7}
+
+.checkbox{ background:url(../images/png.png) 0 6px #fff no-repeat; background-size:100%; padding:40px 20px 20px 20px}
+.check dl{ line-height:60px; font-size:0.26rem; margin-top:16px}
+.check dl dt{ height:60px; width:100px; background:#e8e8e8;text-align:center; color:#666666; border-radius:10px; float:left; font-size:0.26rem}
+.check dl dd a{ padding:0 18px; color:#000000}
+.othercheck{ display:none; background:#FFF; padding:0 0 20px 0}
+
+.video{ background:#FFF; padding:20px; margin-top:20px}
+.video dl{ height:144px; padding:20px 0; border-bottom:#e9e9e9 solid 1px}
+.video dl dt{ width:200px; height:144px; position:relative; float:left; margin-right:20px}
+.video dl dt img{ width:200px; height:144px; display:block; border-radius:10px}
+.video dl dt i{ position:absolute; right:0; bottom:0; font-size:24px; line-height:36px; text-indent:100px;color:#FFF; background:url(../images/i.png) 0 0 no-repeat; background-size:200px 36px; display:block; width:200px; height:36px; border-radius:0 0 10px 10px}
+.video dl dd h4{ font-size:0.3rem; line-height:44px; height:88px; overflow:hidden; font-weight:normal; color:#31424e}
+.video dl dd span{ line-height:36px; font-size:0.26rem; color:#b3bec7}
+.topimg h1{ font-size:0.4rem; line-height:50px; color:#FFF; left:0; bottom:30px; position:absolute; padding:0 10px}
+}
