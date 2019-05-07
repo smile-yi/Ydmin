@@ -1,0 +1,32 @@
+ad_user:
+    id: int
+    nickname: varchar
+    truename: varchar
+    avator: varchar
+    login_count: int
+    last_login_ip: int
+    last_login_time: datetime
+    status: int
+
+ad_user_group:
+    id: int
+    user_id: int
+    group_id: int
+    status: int
+
+ad_group:
+    id: int
+    name: varchar
+    desc: varchar
+    status: int
+    rule_ids: varchar->json
+
+ad_rule:
+    id: int
+    pid: int
+    name: varchar
+    desc: varchar
+    url: varchar
+    is_menu: int
+    icon: varchar
+    status: int

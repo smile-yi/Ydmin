@@ -1,0 +1,33 @@
+# 添加用户到组
+/admin/auth/user/group-add
+
+# 删除组中用户
+/admin/auth/user/group-delete
+
+# 用户组列表
+/admin/auth/user/groups
+
+# 用户权限列表
+/admin/auth/user/auths
+
+# 添加权限到组
+/admin/auth/group/rule-add
+
+# 删除组中权限
+/admin/auth/group/rule-delete
+
+# 组权限列表
+/admin/auth/group/rules
+
+# 祖列表
+/admin/auth/group/list
+
+# 菜单列表
+/admin/auth/menu/list
+# 添加菜单
+/admin/auth/menu/add
+# 修改菜单
+/admin/auth/menu/update
+# 删除菜单
+/admin/auth/menu/delete
+

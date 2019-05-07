@@ -20,6 +20,7 @@ class CreateAdUser extends Migration
             $table->string('password', 100);
             $table->string('nickname', 100)->nullable();
             $table->string('truename', 100)->nullable();
+            $table->string('avatar', 100)->nullable();
             $table->bigInteger('mobile')->nullable();
             $table->string('email', 100)->nullable();
             $table->smallInteger('login_count')->nullable();
@@ -34,13 +35,20 @@ class CreateAdUser extends Migration
             $table->unique('token');
         });
 
+        //初始化数据
+        $this->initData();
+    }
+
+    //初始化数据
+    public function initData(){
         //数据插入
         DB::table('ad_user')->insert([
-            'username'  => 'u9faq',
-            'nickname'  => 'u9faq',
-            'truename'  => 'u9faq',
-            'email' => 'u9faq@example.com',
-            'password'  => Common::md5pwd('u9faq123'),
+            'id' => 1,
+            'username'  => 'yesadmin',
+            'nickname'  => 'yesadmin',
+            'truename'  => 'yesadmin',
+            'email' => 'yesadmin@example.com',
+            'password'  => Common::md5pwd('yesadmin123'),
             'created_at'    => date('Y-m-d H:i:s'),
             'updated_at'    => date('Y-m-d H:i:s')
         ]);

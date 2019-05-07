@@ -232,12 +232,9 @@ return [
 
     //app配置
     'page_count' => 10,
-    'salt' => 'csWyRKwg3ynVUFks',
+    'salt' => 'H3wsn0EJzqWkwqPKAr4e',
     'page' => [
         'limit' => 10,
         'max_limit' => 1000,    //最大响应条目数 
     ],
-
-    //应答币汇率
-    'balance_rate' => 1,
 ];

@@ -16,12 +16,27 @@ class CreateAdGroup extends Migration
         Schema::create('ad_group', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 20)->comment('名称');
-            $table->string('depict', 100)->nullable()->comment('描述');
+            $table->string('desc', 100)->nullable()->comment('描述');
             $table->text('rule_ids')->nullable()->comment('权限ID集 json');
-            $table->tinyInteger('status')->nullable()->default(1)
+            $table->tinyInteger('status')->default(1)
                 ->comment('状态:1.正常;0.禁用;-1.删除');
             $table->timestamps();
         });
+
+        $this->initData();
+    }
+
+    //初始化数据
+    public function initData(){
+        DB::table('ad_group')->insert([
+            'id' => 1,
+            'name' => '默认组',
+            'desc' => '默认组',
+            'rule_ids' => json_encode([1, 2, 3]),
+            'status' => 1,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
     }
 
     /**
