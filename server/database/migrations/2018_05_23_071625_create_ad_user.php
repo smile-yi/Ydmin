@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Utils\Common;
+use SmileYi\Utils\Common;
 
 class CreateAdUser extends Migration
 {
@@ -48,7 +48,7 @@ class CreateAdUser extends Migration
             'nickname'  => 'yesadmin',
             'truename'  => 'yesadmin',
             'email' => 'yesadmin@example.com',
-            'password'  => Common::md5pwd('yesadmin123'),
+            'password'  => Common::md5('yesadmin123'),
             'created_at'    => date('Y-m-d H:i:s'),
             'updated_at'    => date('Y-m-d H:i:s')
         ]);

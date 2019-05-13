@@ -52,4 +52,22 @@ $app->singleton(
 |
 */
 
+//注册工具包配置
+SmileYi\Utils\Config::set([
+    'log' => [
+        'dir' => dirname(__FILE__) . '/../storage/logs/',
+    ],
+    'common' => [
+        'salt' => 'H3wsn0EJzqWkwqPKAr4e',
+    ],
+    'base64' => [
+        'map' => 'OBrsYZajklWApqKLM6Evwz012FbgQRSTUtu3Jn7Ncde45mxGHIfXyoPDChiV89+/'
+    ],
+    'upload' => [
+        'dir' => dirname(__FILE__) . '/../public/upload/',
+        'ext' => ['*'],
+        'size' => 1024 * 1024 * 100
+    ]
+]);
+
 return $app;

@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 
 //登录
 Route::any('login', 'AdminController@login');
+//详情信息
+Route::any('detail', 'AdminController@detail');
 //修改信息
 Route::any('update', 'AdminController@update');
 //修改密码

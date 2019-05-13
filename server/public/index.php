@@ -9,16 +9,6 @@
 
 define('LARAVEL_START', microtime(true));
 
-//跨域请求处理
-header('Access-Control-Allow-Origin:*');
-header('Access-Control-Allow-Methods:GET,POST,PUT,DELETE,OPTIONS');
-header('Access-Control-Allow-Headers:Origin,X-Requested-With,Content-Type,Accept');
-header('Access-Control-Allow-Credentials:false');
-
-//options请求不作处理
-if(isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) == 'options'){
-    exit;
-}
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader

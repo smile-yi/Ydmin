@@ -10,9 +10,10 @@
 namespace App\Http\Controllers\Admin;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use SmileYi\Utils\ArrTool;
 use App\Models\Admin\User;
-use App\Models\Admin\Menu;
-use App\Utils\ArrayUtil;
+use App\Exceptions\NormalException;
+use App\Http\Resources\Admin\User as UserRe;
 
 class AdminController extends Controller {
 
@@ -24,7 +25,7 @@ class AdminController extends Controller {
      */
     function login(Request $request){
         if(!$request->filled(['username', 'password'])){
-            throw new \Exception('缺少必需参数[username:password]', 603);
+            throw new NormalException(603, 'username|password');
         }
 
         $admin   = User::login(
@@ -32,7 +33,7 @@ class AdminController extends Controller {
             $request->input('password')
         );
 
-        return response()->api(['info' => $admin]);
+        return response()->api(['info' => new UserRe($admin)]);
     }
 
     /**
@@ -40,7 +41,7 @@ class AdminController extends Controller {
      * @return  $info
      */
     function detail(Request $request){
-        return response()->api(['info' => $request->admin]);
+        return response()->api(['info' => new UserRe($request->admin)]);
     }
 
     /**
@@ -50,19 +51,17 @@ class AdminController extends Controller {
      */
     function update(Request $request){
         if(!$request->filled('info')){
-            throw new \Exception('缺少必须信息[info]', 603);
+            throw new NormalException(603, 'info');
         }
 
-        $info   = ArrayUtil::fetchValues(
-            $request->input('info'), 
-            ['nickname', 'truename', 'mobile', 'email'], 
-            true
-        );
+        $info = ArrTool::leach($request->input('info'), [
+            'nickname', 'truename', 'mobile', 'email'
+        ], true);
 
         $admin  = $request->admin->fill($info);
         $admin->save();
 
-        return response()->api(['info' => $admin, '_info' => $info]);
+        return response()->api(['info' => new UserRe($admin)]);
     }
 
     /**
@@ -70,10 +69,7 @@ class AdminController extends Controller {
      * @return  $list
      */
     function menus(Request $request){
-        $list   = Menu::list(['status' => 1])->get()->keyBy('id')->toArray();
-        $list   = Menu::attachUserInIt($list, $request->admin, true);
-        $list   = Menu::tidyToTree($list);
-        return response()->api(['list' => $list]);
+        
     }
 
     /**

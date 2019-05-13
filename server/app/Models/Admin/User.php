@@ -9,14 +9,18 @@
 
 namespace App\Models\Admin;
 use App\Models\Base;
-use App\Utils\Common;
-use App\Utils\Format;
 use App\Exceptions\NormalException;
+use SmileYi\Utils\Common;
+use SmileYi\Utils\Format;
 
 class User extends Base {
 
     protected $table    = 'ad_user';
     protected $guarded  = [];
+
+    const STATUS_NORMAL = 1;
+    const STATUS_FORBID = 0;
+    const STATUS_DELETE = -1;
 
     /**
      * 注册用户
@@ -28,15 +32,15 @@ class User extends Base {
     static function register($username, $password, $info = []){
         $isExt  = self::where(['username' => $username])->first();
         if($isExt){
-            throw new NormalException(901);
+            throw new NormalException(608);
         }
 
         $user   = self::create([
             'username'  => $username,
             'nickname'  => isset($info['nickname']) ? $info['nickname'] : $username,
             'truename'  => isset($info['truename']) ? $info['truename'] : null,
-            'password'  => Common::md5pwd($password),
-            'status'    => 1
+            'password'  => Common::md5($password),
+            'status'    => self::STATUS_NORMAL,
         ]);
 
         $user->save();
@@ -52,15 +56,15 @@ class User extends Base {
      * @return  $user [<description>]
      */
     static function repass($user, $password, $newPass){
-        if($user->password != Common::md5pwd($password)){
-            throw new NormalException(801);
-        }
-
-        if(!Format::isPassword($newPass)){
+        if($user->password != Common::md5($password)){
             throw new NormalException(605);
         }
 
-        $user->password     = Common::md5pwd($newPass);
+        if(!Format::isPassword($newPass)){
+            throw new NormalException(604, 'new_pass');
+        }
+
+        $user->password = Common::md5($newPass);
         $user->save();
 
         return $user;
@@ -75,11 +79,11 @@ class User extends Base {
     static function login($username, $password){
         $user   = self::where(['username' => $username])->first();
 
-        if(!$user || $user->password != Common::md5pwd($password)){
-            throw new NormalException(801);
+        if(!$user || $user->password != Common::md5($password)){
+            throw new NormalException(605);
         }
         if($user->status != 1){
-            throw new NormalException(802);
+            throw new NormalException(607);
         }
 
         $user->token    = self::createToken();
@@ -90,44 +94,6 @@ class User extends Base {
         $user->save();
 
         return $user;
-    }
-
-	/** 
-     * 查询条件设置
-     * @param   $where
-     * @param   $query 
-     * @return  $query
-     */
-    static function setWhere($where, $query = null){
-        if($query){
-            return $query->where($where)->where('status', '!=', -1);
-        }else{
-            return static::where($where)->where('status', '!=', -1);
-        }   
-    }
-
-    /**
-     * 字段转义处理
-     * @param   $data
-     * @param   $batch
-     * @return  $data
-     */
-    static function dealColumn($data, $batch = true){
-        $deal   = function($item) {
-            $item['status_text']    = ['禁用', '正常'][$item['status']];
-            isset($item['last_login_ip']) && $item['last_login_ip']  = long2ip($item['last_login_ip']);
-            return $item;
-        };
-
-        if($batch){
-            foreach($data as &$item){
-                $item   = $deal($item);
-            }
-        }else{
-            $data   = $deal($data);
-        }
-
-        return $data;
     }
 
     static function createToken(){

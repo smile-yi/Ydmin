@@ -77,31 +77,4 @@ class Base extends Model {
             return static::where($where)->where('status', '!=', -1);
         }
     }
-
-    /**
-     * 字段转义函数
-     * @param   $data
-     * @param   $batch
-     * @return  $data
-     */
-    static function dealColumn($data, $batch = true){
-        $column     = get_called_class()::column();
-        $deal   = function($item) use ($column){
-            foreach($column as $key => $val){
-                $item[$key] = is_object($val) ? $val($item) : $val;
-            }
-
-            return $item;
-        };
-
-        if($batch){
-            foreach($data as &$item){
-                $item   = $deal($item);
-            }
-        }else{
-            $data   = $deal($data);
-        }
-
-        return $data;
-    }
 }

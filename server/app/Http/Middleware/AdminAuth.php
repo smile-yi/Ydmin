@@ -31,15 +31,15 @@ class AdminAuth
     public function handle($request, Closure $next)
     {
         
-        $token  = $request->input('token');
+        $token  = $request->input('authorized_key');
         if(\App::environment('local') and !$token){
-            $token = '790F65FB3F8408310569A3C1945E281D';
+            $token = 'CD1086502EDAC84684B2C8C170E8C2E4';
         }
         if($token){
-            $request->admin     = User::where([
+            $request->admin = User::where([
                 ['token', '=', $token],
                 ['token_deadline', '>=', date('Y-m-d H:i:s')],
-                ['status', '=', 1]
+                ['status', '=', User::STATUS_NORMAL]
             ])->first();
         }
 
@@ -51,7 +51,7 @@ class AdminAuth
 
         //权限检测
         if(!in_array($path, $this->noNeedLogin) 
-            && $request->admin->id != 1 
+            && !in_array($request->admin->id, config('auth.admin.root_ids'))
             && !in_array($path, $this->noNeedAuth) 
             && !Auth::check($request->admin, $path)){
             throw new NormalException(806, $request->admin->id);

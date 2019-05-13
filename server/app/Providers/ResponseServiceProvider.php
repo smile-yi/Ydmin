@@ -16,8 +16,9 @@ class ResponseServiceProvider extends ServiceProvider
     {   
         Response::macro('api', function ($value = 'Oh yes!') {
             return Response::json([
-                'result' => 'success',
-                'data'   => $value
+                'errno' => 0,
+                'errmsg' => '',
+                'data' => $value
             ]);
         });
     }

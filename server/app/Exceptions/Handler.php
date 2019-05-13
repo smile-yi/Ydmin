@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use App\Utils\Log;
+use SmileYi\Utils\Log;
 
 class Handler extends ExceptionHandler
 {
@@ -49,45 +49,33 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        $httpCode    = method_exists($exception, 'getStatusCode') 
-            ? $exception->getStatusCode() : 500;
-            
-        $resData    = [
-            'message'  => $exception->getMessage(),
-            'code'  => $exception->getCode()
+        $resData = [
+            'errno' => 1,
+            'errmsg' => '请求出错',
+            'data' => []
         ];
-
-        if(!\App::environment('pro')){
-            $resData   = array_merge($resData, [
-                'file'  => $exception->getFile(),
-                'line'  => $exception->getLine(),
-                'trace' => array_slice($exception->getTrace(), 0, 3)
-            ]);
+        if ($exception instanceof NormalException) {
+            $resData['errno'] = $exception->getCode();
+            $resData['errmsg'] = $exception->getMessage();
         }
 
-        //响应数据整理
-        $response   = [
-            'http_code' => $httpCode,
-            'result'=> 'fail',
-            'data'  => $resData,
-        ];
+        if(!\App::environment('pro')){
+            $resData['data'] = [
+                'code' => $exception->getCode(),
+                'message' => $exception->getMessage(), 
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'trace' => array_slice($exception->getTrace(), 0, 3)
+            ];
+        }
         
         //日志写入
         Log::getInstance('file')->put('exception', [
             'uri' => $request->path(),
             'request' => $request->all(),
-            'response' => $response
+            'response' => $resData
         ]);
 
-        // if(\App::environment('local')){
-        //     return parent::render($request, $exception);
-        // }
-
-        //后台响应json数据
-        if(preg_match('/^admin.+$/', $request->path())){
-            return response()->json($response, 200);
-        }
-        
-        return response()->view('404', ['response' => $response]);
+        return response()->json($resData);
     }
 }
