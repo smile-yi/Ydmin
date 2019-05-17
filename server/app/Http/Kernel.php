@@ -21,7 +21,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\EncryptCookies::class,
         \App\Http\Middleware\TrustProxies::class,
         // \App\Http\Middleware\ParamCheck::class,
-        // \App\Http\Middleware\Log::class,
+        \App\Http\Middleware\Log::class,
     ];
 
     /**

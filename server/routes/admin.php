@@ -16,7 +16,7 @@ Route::any('detail', 'AdminController@detail');
 //修改信息
 Route::any('update', 'AdminController@update');
 //修改密码
-Route::any('repass', 'AdminController@repass');
+Route::any('repwd', 'AdminController@repwd');
 //菜单获取
 Route::any('menus', 'AdminController@menus');
 

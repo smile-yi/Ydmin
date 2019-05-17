@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use SmileYi\Utils\ArrTool;
+use SmileYi\Utils\Common;
 use App\Models\Admin\User;
 use App\Exceptions\NormalException;
 use App\Http\Resources\Admin\User as UserRe;
@@ -28,7 +29,7 @@ class AdminController extends Controller {
             throw new NormalException(603, 'username|password');
         }
 
-        $admin   = User::login(
+        $admin = User::login(
             $request->input('username'),
             $request->input('password')
         );
@@ -74,19 +75,18 @@ class AdminController extends Controller {
 
     /**
      * 用户密码修改
-     * @param   $password 原密码
-     * @param   $new_pass 新密码
+     * @param   $pwd_old 原密码
+     * @param   $pwd_new 新密码
      * @return  boolean [<description>]
      */
-    function repass(Request $request){
-        if(!$request->filled(['password', 'new_pass'])){
-            throw new \Exception('缺少必需参数[password:new_pass]', 603);
+    function repwd(Request $request){
+        if(!$request->filled(['pwd_old', 'pwd_new'])){
+            throw new NormalException(603, 'pwd_old:pwd_new');
         }
 
-        $request->admin     = User::repass(
-            $request->admin,
-            $request->input('password'),
-            $request->input('new_pass')
+        $request->admin->repwd(
+            $request->input('pwd_old'),
+            $request->input('pwd_new')
         );
 
         return response()->api();

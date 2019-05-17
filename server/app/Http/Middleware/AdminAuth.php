@@ -6,6 +6,7 @@ use Closure;
 use App\Models\Admin\User;
 use App\Services\Admin\Auth;
 use App\Exceptions\NormalException;
+use SmileYi\Utils\Token;
 
 class AdminAuth
 {
@@ -29,13 +30,12 @@ class AdminAuth
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {
-        
-        $token  = $request->input('authorized_key');
+    {  
+        $token = $request->header('authorized_token');
         if(\App::environment('local') and !$token){
-            $token = 'CD1086502EDAC84684B2C8C170E8C2E4';
+            $token = '22E92809C301140CE59233419E8D2A64';
         }
-        if($token){
+        if ($token && Token::verify($token)) {
             $request->admin = User::where([
                 ['token', '=', $token],
                 ['token_deadline', '>=', date('Y-m-d H:i:s')],
@@ -43,17 +43,17 @@ class AdminAuth
             ])->first();
         }
 
-        $path   = $request->path();
+        $path = $request->path();
         //登录检测
         if(!in_array($path, $this->noNeedLogin) && (!$request->admin || $request->admin->status != 1)){
             throw new NormalException(601);
         }
 
         //权限检测
-        if(!in_array($path, $this->noNeedLogin) 
+        if (!in_array($path, $this->noNeedLogin) 
             && !in_array($request->admin->id, config('auth.admin.root_ids'))
             && !in_array($path, $this->noNeedAuth) 
-            && !Auth::check($request->admin, $path)){
+            && !Auth::check($request->admin, $path)) {
             throw new NormalException(806, $request->admin->id);
         }
 

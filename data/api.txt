@@ -24,10 +24,13 @@
 
 # 菜单列表
 /admin/auth/menu/list
+
 # 添加菜单
 /admin/auth/menu/add
+
 # 修改菜单
 /admin/auth/menu/update
+
 # 删除菜单
 /admin/auth/menu/delete
 

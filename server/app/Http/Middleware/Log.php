@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 use App\Exceptions\NormalException;
-use App\Utils\Log as LogUtil;
+use SmileYi\Utils\Log as LogUtil;
 use Illuminate\Support\Facades\DB;
 use Closure;
 

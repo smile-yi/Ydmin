@@ -23,10 +23,11 @@ class NormalException extends \Exception {
         '608' => '用户名已存在'
     ];
 
-    function __construct($code, $remark = ''){
+    function __construct(int $code, string $remark = ''){
         $message    = isset(self::MAP_CODE[$code]) ? self::MAP_CODE[$code] : '未知错误';
-        if($remark)
-            $message    = $message.'('.$remark.')';
+        if($remark){
+            $message    = $message.'['.$remark.']';
+        }
 
         parent::__construct($message, $code);
     }

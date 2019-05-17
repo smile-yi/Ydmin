@@ -12,6 +12,7 @@ use App\Models\Base;
 use App\Exceptions\NormalException;
 use SmileYi\Utils\Common;
 use SmileYi\Utils\Format;
+use SmileYi\Utils\Token;
 
 class User extends Base {
 
@@ -35,12 +36,13 @@ class User extends Base {
             throw new NormalException(608);
         }
 
-        $user   = self::create([
-            'username'  => $username,
-            'nickname'  => isset($info['nickname']) ? $info['nickname'] : $username,
-            'truename'  => isset($info['truename']) ? $info['truename'] : null,
-            'password'  => Common::md5($password),
-            'status'    => self::STATUS_NORMAL,
+        $user = self::create([
+            'username' => $username,
+            'nickname' => $info['nickname'] ?? $username,
+            'truename' => $info['truename'] ?? null,
+            'email' => $info['email'] ?? null, 
+            'password' => Common::md5($password),
+            'status' => self::STATUS_NORMAL,
         ]);
 
         $user->save();
@@ -48,26 +50,24 @@ class User extends Base {
         return $user;
     }
 
+
     /**
      * 修改密码
-     * @param   $user
-     * @param   $password 原密码
-     * @param   $newPass 新密码
-     * @return  $user [<description>]
+     * @param   $pwdOld 原密码
+     * @param   $pwdNew 新密码
+     * @return  null [<description>]
      */
-    static function repass($user, $password, $newPass){
-        if($user->password != Common::md5($password)){
+    function repwd($pwdOld, $pwdNew) {
+        if ($this->password != Common::md5($pwdOld)) {
             throw new NormalException(605);
         }
 
-        if(!Format::isPassword($newPass)){
-            throw new NormalException(604, 'new_pass');
+        if (!Format::isPassword($pwdNew)) {
+            throw new NormalException(604);
         }
 
-        $user->password = Common::md5($newPass);
-        $user->save();
-
-        return $user;
+        $this->password = Common::md5($pwdNew);
+        $this->save();
     }
 
     /**
@@ -77,27 +77,25 @@ class User extends Base {
      * @return  $user
      */
     static function login($username, $password){
-        $user   = self::where(['username' => $username])->first();
+        $user = static::where(['username' => $username])->first();
 
         if(!$user || $user->password != Common::md5($password)){
             throw new NormalException(605);
         }
-        if($user->status != 1){
+        if($user->status != static::STATUS_NORMAL){
             throw new NormalException(607);
         }
 
-        $user->token    = self::createToken();
-        $user->token_deadline   = date('Y-m-d H:i:s', strtotime('+1 month'));
-        $user->login_count++;
-        $user->last_login_time  = date('Y-m-d H:i:s');
-        $user->last_login_ip    = ip2long($_SERVER['REMOTE_ADDR']);
+        $user->fill([
+            'token' => Token::create(),
+            'token_deadline' => date('Y-m-d H:i:s', strtotime('+1 month')),
+            'login_count' => $user->login_count + 1,
+            'last_login_time' => date('Y-m-d H:i:s'),
+            'last_login_ip' => Common::getClientIp(true)
+        ]);
         $user->save();
 
         return $user;
-    }
-
-    static function createToken(){
-        return strtoupper(md5(time().'.'.rand(10000, 99999)));
     }
 
     //关联组信息
