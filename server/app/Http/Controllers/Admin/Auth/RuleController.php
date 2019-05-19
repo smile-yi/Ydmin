@@ -11,69 +11,56 @@ namespace App\Http\Controllers\Admin\Auth;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use SmileYi\Utils\ArrTool;
 use App\Models\Admin\Rule;
-use App\Models\Admin\Menu;
-use App\Utils\ArrayUtil;
 use App\Exceptions\NormalException;
 
-class MenuController extends Controller {
+class RuleController extends Controller {
 
     /** 
      * 菜单添加
      * @param   $pid
      * @param   $name
      * @param   $url
-     * @param   $show
+     * @param   $is_menu 是否为菜单
      * @param   $icon
-     * @return  $menu
+     * @return  info
      */
     function add(Request $request){
         if(!$request->filled(['name', 'url'])){
             throw new NormalException(603, 'name|url');
         }
 
-        DB::beginTransaction();
-        try {
-            //创建权限
-            $rule   = Rule::create([
-                'name'  => $request->input('name'),
-                'url'  => $request->input('url'),
-                'status'    => 1
-            ]);
+        $rule = Rule::create([
+            'pid' => $request->input('pid', 0),
+            'name' => $request->input('name'),
+            'url' => $request->input('url'),
+            'is_menu' => $request->input('is_menu', 0),
+            'icon' => $request->input('icon', ''),
+            'status' => Rule::STATUS_NORMAL
+        ]);
 
-            //创建菜单
-            $menu   = Menu::create([
-                'pid'   => $request->input('pid', 0),
-                'name'  => $request->input('name'),
-                'url'   => $request->input('url'),
-                'rule_id'   => $rule->id,
-                'show'  => $request->input('show', 1),
-                'icon'  => $request->input('icon'),
-                'status'    => 1
-            ]);
-
-            DB::commit();
-        }catch(\Exception $e){
-            DB::rollBack();
-            throw $e;
-        }
-
-        return response()->api(['info' => $menu]);
+        return response()->api(['info' => $rule]);
     }
 
     /**
      * 列表获取
+     * @param   $user_id
      * @param   $group_id
+     * @param   $where 
      * @return  list of tree
      */
     function list(Request $request){
-        $groupId    = $request->input('group_id');
-        
-        $list   = Menu::where('status', '!=', -1)->get()->keyBy('id')->toArray();
-        $groupId && $list = Menu::attachGroupInIt($list, $groupId, true);
-        $list   = Menu::tidyToTree($list);
+        $where = $request->input('where', []);
+        $page = $request->input('page', false);
+        $pageInfo = true;
 
-        return response()->api(['list' => $list]);
+        $userId = $request->input('user_id', false);
+        $groupId = $request->input('group_id', false);
+        
+        $list = Rule::list($where, $page, $pageInfo)->get()->keyBy('id')->toArray();
+
+        return response()->api(['list' => Rule::toTree($list)]);
     }
 
     /**

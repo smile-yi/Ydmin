@@ -34,7 +34,7 @@ Route::namespace('Auth')->prefix('auth')->group(function(){
 
     //用户信息更改
     Route::any('user/update', 'UserController@update');
-
+    
     //更改用户组
     Route::any('user/update-groups', 'UserController@updateGroups');
 
@@ -54,13 +54,13 @@ Route::namespace('Auth')->prefix('auth')->group(function(){
     Route::any('group/update-rules', 'GroupController@updateRules');
 
     //菜单列表
-    Route::any('menu/list', 'MenuController@list');
+    Route::any('rule/list', 'RuleController@list');
 
     //菜单添加
-    Route::any('menu/add', 'MenuController@add');
+    Route::any('rule/add', 'RuleController@add');
 
     //菜单编辑
-    Route::any('menu/update', 'MenuController@update');
+    Route::any('rule/update', 'RuleController@update');
 });
 
 //faq管理

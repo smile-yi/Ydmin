@@ -11,10 +11,11 @@ namespace App\Http\Controllers\Admin\Auth;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use SmileYi\Utils\ArrTool;
 use App\Models\Admin\User;
 use App\Models\Admin\UserGroup;
-use App\Utils\ArrayUtil;
 use App\Exceptions\NormalException;
+use App\Http\Resources\Admin\User as UserRe;
 
 class UserController extends Controller {
 
@@ -25,14 +26,13 @@ class UserController extends Controller {
      * @return  list and page_html
      */
     function list(Request $request){
-        $where  = $request->input('condition', []);
-        $page   = $request->input('page', 1);
-        $pageInfo   = true;
+        $where = $request->input('where', []);
+        $page = $request->input('page', 1);
+        $pageInfo = true;
 
         $list   = User::list($where, $page, $pageInfo)->get();
-        $list   = User::dealColumn($list->toArray(), true);
         return response()->api([
-            'list' => $list, 
+            'list' => UserRe::collection($list), 
             'page_info' => $pageInfo
         ]);
     }
@@ -45,18 +45,17 @@ class UserController extends Controller {
      */
     function add(Request $request){
         if(!$request->filled(['username', 'password'])){
-            throw new NormalException(603, 'username|password');
+            throw new NormalException(603, 'username||password');
         }
 
-        $user   = User::register(
+        //用户注册
+        $user = User::register(
             $request->input('username'),
             $request->input('password'),
             $request->all()
         );
 
-        $user   = User::dealColumn($user->toArray(), false);
-
-        return response()->api(['info' => $user]);
+        return response()->api(['info' => new UserRe($user)]);
     }
     
     /**
@@ -71,10 +70,10 @@ class UserController extends Controller {
 
         $user   = User::find($request->input('id'));
         if(!$user){
-            throw new NormalException(805, $request->input('id'));
+            throw new NormalException(621, $request->input('id'));
         }
 
-        return response()->api(['info' => $user]);
+        return response()->api(['info' => new UserRe($user)]);
     }
 
     /**
@@ -88,18 +87,18 @@ class UserController extends Controller {
             throw new NormalException(603, 'id|info');
         }
 
-        if($request->input('id') == 1){
-            throw new NormalException(807);
+        if(in_array($request->input('id'), config('auth.admin.root_ids'))){
+            throw new NormalException(609);
         }
-        $info   = ArrayUtil::fetchValues(
-            $request->input('info'),
-            ['nickname', 'truename', 'mobile', 'email', 'status'],
-            true
+        $info   = ArrTool::leach(
+            $request->input('info'), [
+                'nickname', 'truename', 'mobile', 'email', 'status'
+            ]
         );
 
         $result     = User::where(['id' => $request->input('id')])->update($info);
         if($result <= 0){
-            throw new NormalException(804);
+            throw new NormalException(622);
         }
 
         return response()->api();
@@ -123,19 +122,19 @@ class UserController extends Controller {
             UserGroup::where(['user_id' => $request->input('id')])->delete();
 
             //添加组信息
-            $data   = [];
+            $data = [];
             foreach($request->input('group_ids') as $groupId){
-                $data[]     = [
-                    'user_id'   => $request->input('id'),
-                    'group_id'  => $groupId
+                $data[] = [
+                    'user_id' => $request->input('id'),
+                    'group_id' => $groupId
                 ];
             }
             UserGroup::insert($data);
 
             DB::commit();
-        }catch(\Exception $e){
+        }catch(\Exception $exception){
             DB::rollBack();
-            throw $e;
+            throw $exception;
         }
 
         return response()->api();

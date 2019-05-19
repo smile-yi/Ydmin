@@ -31,18 +31,18 @@ class User extends Base {
      * @return  $user
      */
     static function register($username, $password, $info = []){
-        $isExt  = self::where(['username' => $username])->first();
+        $isExt  = static::where(['username' => $username])->first();
         if($isExt){
             throw new NormalException(608);
         }
 
-        $user = self::create([
+        $user = static::create([
             'username' => $username,
             'nickname' => $info['nickname'] ?? $username,
             'truename' => $info['truename'] ?? null,
             'email' => $info['email'] ?? null, 
             'password' => Common::md5($password),
-            'status' => self::STATUS_NORMAL,
+            'status' => static::STATUS_NORMAL,
         ]);
 
         $user->save();
@@ -77,8 +77,8 @@ class User extends Base {
      * @return  $user
      */
     static function login($username, $password){
-        $user = static::where(['username' => $username])->first();
-
+        $user = User::where(['username' => $username])->first();
+        // var_dump( $user);exit;
         if(!$user || $user->password != Common::md5($password)){
             throw new NormalException(605);
         }
@@ -100,6 +100,6 @@ class User extends Base {
 
     //关联组信息
     public function groups(){
-        return $this->belongsToMany('App\Models\Admin\Group', 'ad_user_group')->where('status', 1);
+        return $this->belongsToMany('App\Models\Admin\Group', 'ad_user_group')->where('status', Group::STATUS_NORMAL);
     }
 }

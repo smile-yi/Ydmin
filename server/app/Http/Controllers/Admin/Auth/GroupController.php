@@ -11,8 +11,10 @@ namespace App\Http\Controllers\Admin\Auth;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\Group;
-use App\Utils\ArrayUtil;
+use App\Models\Admin\UserGroup;
+use App\Http\Resources\Auth\Group as GroupRe;
 use App\Exceptions\NormalException;
+use SmileYi\Utils\ArrTool;
 
 class GroupController extends Controller {
 
@@ -29,10 +31,10 @@ class GroupController extends Controller {
         }
 
         $group  = Group::create([
-            'name'  => $request->input('name'),
-            'depict'    => $request->input('depict'),
-            'rule_ids'  => $request->input('rule_ids'),
-            'status'    => 1
+            'name' => $request->input('name'),
+            'desc' => $request->input('desc'),
+            'rule_ids' => $request->input('rule_ids'),
+            'status' => Group::STATUS_NORMAL
         ]);
 
         return response()->api(['info' => $group]);
@@ -40,27 +42,36 @@ class GroupController extends Controller {
 
     /**
      * 列表信息获取
-     * @param   $user_id   附加用户是否存在与改组中
+     * @param   $user_id   附加用户是否存在
      * @param   $page
      * @return  list and page_html
      */
     function list(Request $request){
-        $userId     = $request->input('user_id');
-        $page   = $request->input('page', false);
-        $pageInfo   = true;
+        $userId = $request->input('user_id', false);
+        $page = $request->input('page', false);
+        $pageInfo = true;
 
-        $list   = Group::list([], $page, $pageInfo)->get()->toArray();
-        $userId && $list = Group::attachUserInIt($list, $userId, true);
-        $list   = Group::dealColumn($list, true);
+        $list   = Group::list([], $page, $pageInfo)->get();
+        // 判断用户是否在组中
+        if ($userId) {
+            $userGroupIds = UserGroup::where('user_id', $userId)->pluck('group_id')->toArray();
+            foreach ($list as $item) {
+                if (in_array($item->id, $userGroupIds)) {
+                    $item->user_in = 1;
+                } else {
+                    $item->user_id = 0;
+                }
+            }
+        }
 
         return response()->api([
-            'list'  => $list,
+            'list'  => GroupRe::collection($list),
             'page_info' => $pageInfo
         ]);
     }
 
     /**
-     * 编辑
+     * 编辑 (包括编辑权限)
      * @param   $id
      * @param   $info
      * @return  boolean
@@ -70,37 +81,15 @@ class GroupController extends Controller {
             throw new NormalException(603, 'id|info');
         }
 
-        $info   = ArrayUtil::fetchValues(
-            $request->input('info'),
-            ['name', 'depict', 'status'],
-            true
-        );
+        $info   = ArrTool::leach($request->input('info'), [
+            'name', 'desc', 'status', 'rule_ids'
+        ], true);
+
+        //格式化权限信息
         isset($info['rule_ids']) && $info['rule_ids'] = json_encode($info['rule_ids']);
-        $result     = Group::where(['id' => $request->input('id')])->update($info);
+        $result = Group::where(['id' => $request->input('id')])->update($info);
         if($result <= 0){
-            throw new NormalException(903);
-        }
-
-        return response()->api();
-    }
-
-    /** 
-     * 更改权限
-     * @param   $id
-     * @param   $rule_ids
-     * @return  boolean
-     */
-    function updateRules(Request $request){
-        if(!$request->filled(['id', 'rule_ids'])){
-            throw new NormalException(603, 'id|rule_ids');
-        }
-
-        $result     = Group::where(['id' => $request->input('id')])->update([
-            'rule_ids'  => json_encode($request->input('rule_ids'))
-        ]);
-
-        if($result <= 0){
-            throw new \Exception(906);
+            throw new NormalException(622);
         }
 
         return response()->api();

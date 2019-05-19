@@ -1,8 +1,5 @@
-# 添加用户到组
-/admin/auth/user/group-add
-
-# 删除组中用户
-/admin/auth/user/group-delete
+# 修改用户所在组
+/admin/auth/user/update-groups
 
 # 用户组列表
 /admin/auth/user/groups

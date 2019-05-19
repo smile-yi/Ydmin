@@ -15,4 +15,24 @@ class Rule extends Base {
     protected $table    = 'ad_rule';
     protected $guarded  = [];
 
+    const STATUS_NORMAL = 1;
+    const STATUS_FORBID = 0;
+    const STATUS_DELETE = -1;
+
+    /**
+     * 菜单转化为树形结构
+     * @param   $list
+     * @return tree
+     */
+    static function toTree(array $list) {
+        $tree = [];
+        foreach ($list as &$item) {
+            if (!isset($item['pid'])) {
+                continue;
+            }
+            $list[$item['pid']]['childs'][] = &$item;
+        }
+
+        return $list[0] ?? [];
+    }
 }

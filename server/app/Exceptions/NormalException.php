@@ -20,7 +20,11 @@ class NormalException extends \Exception {
         '605' => '密码错误',
         '606' => '用户不存在',
         '607' => '用户已被禁用',
-        '608' => '用户名已存在'
+        '608' => '用户名已存在',
+        '609' => '无操作权限',
+
+        '621' => '条目不存在',
+        '622' => '条目修改失败',
     ];
 
     function __construct(int $code, string $remark = ''){

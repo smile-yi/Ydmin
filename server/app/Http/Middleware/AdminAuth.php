@@ -35,7 +35,7 @@ class AdminAuth
         if(\App::environment('local') and !$token){
             $token = '22E92809C301140CE59233419E8D2A64';
         }
-        if ($token && Token::verify($token)) {
+        if ($token) {
             $request->admin = User::where([
                 ['token', '=', $token],
                 ['token_deadline', '>=', date('Y-m-d H:i:s')],
@@ -54,7 +54,7 @@ class AdminAuth
             && !in_array($request->admin->id, config('auth.admin.root_ids'))
             && !in_array($path, $this->noNeedAuth) 
             && !Auth::check($request->admin, $path)) {
-            throw new NormalException(806, $request->admin->id);
+            throw new NormalException(609, $request->admin->id);
         }
 
         return $next($request);
