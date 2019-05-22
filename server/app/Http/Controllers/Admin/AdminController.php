@@ -13,8 +13,9 @@ use Illuminate\Http\Request;
 use SmileYi\Utils\ArrTool;
 use SmileYi\Utils\Common;
 use App\Models\Admin\User;
+use App\Models\Admin\Rule;
 use App\Exceptions\NormalException;
-use App\Http\Resources\Admin\User as UserRe;
+use App\Services\Admin\Auth;
 
 class AdminController extends Controller {
 
@@ -34,7 +35,7 @@ class AdminController extends Controller {
             $request->input('password')
         );
 
-        return response()->api(['info' => new UserRe($admin)]);
+        return response()->api(['info' => $admin->convert(2)]);
     }
 
     /**
@@ -42,7 +43,7 @@ class AdminController extends Controller {
      * @return  $info
      */
     function detail(Request $request){
-        return response()->api(['info' => new UserRe($request->admin)]);
+        return response()->api(['info' => $request->admin->convert(2)]);
     }
 
     /**
@@ -57,12 +58,15 @@ class AdminController extends Controller {
 
         $info = ArrTool::leach($request->input('info'), [
             'nickname', 'truename', 'mobile', 'email'
-        ], true);
+        ]);
+        if (empty($info)) {
+            throw new NormalException(610, 'info');
+        }
 
         $admin  = $request->admin->fill($info);
         $admin->save();
 
-        return response()->api(['info' => new UserRe($admin)]);
+        return response()->api(['info' => $admin->convert(2)]);
     }
 
     /**
@@ -70,7 +74,15 @@ class AdminController extends Controller {
      * @return  $list
      */
     function menus(Request $request){
-        
+        $admin = $request->admin;
+
+        $list = Rule::where('is_menu', 1)->get();
+        //过滤无权限菜单
+        $list = $list->filter(function($item) use ($admin){
+            return Auth::check($admin, $item->url);
+        });
+
+        return response()->api(['list' => Rule::toTree($list)]);
     }
 
     /**
@@ -81,7 +93,7 @@ class AdminController extends Controller {
      */
     function repwd(Request $request){
         if(!$request->filled(['pwd_old', 'pwd_new'])){
-            throw new NormalException(603, 'pwd_old:pwd_new');
+            throw new NormalException(603, 'pwd_old|pwd_new');
         }
 
         $request->admin->repwd(

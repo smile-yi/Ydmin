@@ -31,7 +31,8 @@ class AdminAuth
      */
     public function handle($request, Closure $next)
     {  
-        $token = $request->header('authorized_token');
+        // $token = $request->header('authorized_token');
+        $token = $request->input('token');
         if(\App::environment('local') and !$token){
             $token = '22E92809C301140CE59233419E8D2A64';
         }

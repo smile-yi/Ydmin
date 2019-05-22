@@ -20,7 +20,7 @@ class ParamCheck
     public function handle($request, Closure $next)
     {   
         //参数格式检测
-        $params     = $request->all();
+        $params = $request->all();
         $this->format($params);
 
         //图形图形验证码检测

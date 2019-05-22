@@ -12,7 +12,6 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\Group;
 use App\Models\Admin\UserGroup;
-use App\Http\Resources\Auth\Group as GroupRe;
 use App\Exceptions\NormalException;
 use SmileYi\Utils\ArrTool;
 
@@ -30,14 +29,14 @@ class GroupController extends Controller {
             throw new NormalException(603, 'name');
         }
 
-        $group  = Group::create([
+        $group = Group::create([
             'name' => $request->input('name'),
             'desc' => $request->input('desc'),
             'rule_ids' => $request->input('rule_ids'),
             'status' => Group::STATUS_NORMAL
         ]);
 
-        return response()->api(['info' => $group]);
+        return response()->api(['info' => $group->convert()]);
     }
 
     /**
@@ -48,8 +47,8 @@ class GroupController extends Controller {
      */
     function list(Request $request){
         $userId = $request->input('user_id', false);
-        $page = $request->input('page', false);
-        $pageInfo = true;
+        $page = $request->input('page', 1);
+        $pageInfo = [];
 
         $list   = Group::list([], $page, $pageInfo)->get();
         // 判断用户是否在组中
@@ -57,15 +56,15 @@ class GroupController extends Controller {
             $userGroupIds = UserGroup::where('user_id', $userId)->pluck('group_id')->toArray();
             foreach ($list as $item) {
                 if (in_array($item->id, $userGroupIds)) {
-                    $item->user_in = 1;
+                    $item->user_in = true;
                 } else {
-                    $item->user_id = 0;
+                    $item->user_in = false;
                 }
             }
         }
 
         return response()->api([
-            'list'  => GroupRe::collection($list),
+            'list'  => $list->convert(),
             'page_info' => $pageInfo
         ]);
     }
@@ -77,19 +76,25 @@ class GroupController extends Controller {
      * @return  boolean
      */
     function update(Request $request){
-        if(!$request->filled(['id', 'info'])){
+        //必须存在
+        if (!$request->filled(['id', 'info'])) {
             throw new NormalException(603, 'id|info');
         }
 
-        $info   = ArrTool::leach($request->input('info'), [
+        //若存在，则不能为null
+        if (ArrTool::existNull($request->input('info'), ['name', 'status'])) {
+            throw new NormalException(610, 'info');
+        }
+
+        $info = ArrTool::leach($request->input('info'), [
             'name', 'desc', 'status', 'rule_ids'
-        ], true);
+        ]);
 
         //格式化权限信息
         isset($info['rule_ids']) && $info['rule_ids'] = json_encode($info['rule_ids']);
         $result = Group::where(['id' => $request->input('id')])->update($info);
         if($result <= 0){
-            throw new NormalException(622);
+            throw new NormalException(622, 'adgroup');
         }
 
         return response()->api();

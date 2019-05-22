@@ -22,19 +22,19 @@ class Auth {
      * @param   User    $user
      * @return  $list of url
      */
-    static function getListOfUser(User $user){
-        $cache  = 'user_auth_list_'.$user->id;
-        $list   = Cache::get($cache);
+    static function list(User $user){
+        $cacheKey = 'aduser:auth:list:' . $user->id;
+        $list = Cache::get($cacheKey);
         if($list === null){
-            $groups     = $user->groups;
-            $rule_ids   = [];
+            $groups = $user->groups;
+            $ruleIds = [];
             foreach($groups as $group){
-                $rule_ids   = array_merge($rule_ids, $group->rule_ids);
+                $ruleIds = array_merge($ruleIds, $group->rule_ids);
             }
-            $rule_ids   = array_filter($rule_ids);
+            $ruleIds = array_filter($ruleIds);
     
-            $list   = Rule::whereIn('id', $rule_ids)->where('status', 1)->pluck('url')->toArray();
-            Cache::put($cache, $list, 1);
+            $list = Rule::whereIn('id', $ruleIds)->where('status', Rule::STATUS_NORMAL)->pluck('url')->toArray();
+            Cache::put($cacheKey, $list, 1);
         }    
 
         return $list;
@@ -47,13 +47,11 @@ class Auth {
      * @return  boolean
      */
     static function check(User $user, $url){
-	return true;
         if(!in_array($user->id, config('auth.admin.root_ids', []))){
-            $auths  = self::getListOfUser($user);
+            $auths  = self::list($user);
             return in_array($url, $auths);
         }
 
         return true;
     }
-
 }

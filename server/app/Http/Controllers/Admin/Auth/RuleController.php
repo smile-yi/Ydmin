@@ -13,7 +13,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use SmileYi\Utils\ArrTool;
 use App\Models\Admin\Rule;
+use App\Models\Admin\User;
+use App\Models\Admin\Group;
 use App\Exceptions\NormalException;
+use App\Services\Admin\Auth;
 
 class RuleController extends Controller {
 
@@ -32,11 +35,11 @@ class RuleController extends Controller {
         }
 
         $rule = Rule::create([
-            'pid' => $request->input('pid', 0),
+            'pid' => $request->input('pid') ?? 0,
             'name' => $request->input('name'),
             'url' => $request->input('url'),
-            'is_menu' => $request->input('is_menu', 0),
-            'icon' => $request->input('icon', ''),
+            'is_menu' => $request->input('is_menu') ?? 0,
+            'icon' => $request->input('icon') ?? '',
             'status' => Rule::STATUS_NORMAL
         ]);
 
@@ -48,19 +51,50 @@ class RuleController extends Controller {
      * @param   $user_id
      * @param   $group_id
      * @param   $where 
+     * @param   $format 格式
      * @return  list of tree
      */
     function list(Request $request){
         $where = $request->input('where', []);
         $page = $request->input('page', false);
-        $pageInfo = true;
+        $pageInfo = [];
 
         $userId = $request->input('user_id', false);
         $groupId = $request->input('group_id', false);
         
-        $list = Rule::list($where, $page, $pageInfo)->get()->keyBy('id')->toArray();
+        $list = Rule::list($where, $page, $pageInfo)->get();
 
-        return response()->api(['list' => Rule::toTree($list)]);
+        //用户权限附加
+        if ($userId) {
+            $user = User::where('id', $userId)->first();
+            if (!$user) {
+                throw new NormalException(621, 'aduser');
+            }
+            foreach ($list as $item) {
+                $item->user_id = Auth::check($user, $item->url);
+            }
+        }
+
+        //组权限附加
+        if ($groupId) {
+            $group = Group::where('id', $groupId)->first();
+            if (!$group) {
+                throw new NormalException(621, 'adgroup');
+            }
+            foreach ($list as $item) {
+                $item->group_in = in_array($item->id, $group->rule_ids);
+            }
+        }
+
+        //树形格式返回
+        if ($request->input('format') == 'tree') {
+            return response()->api(['list' => Rule::toTree($list)]);
+        }
+
+        return response()->api([
+            'list' => $list->convert(), 
+            'page_info' => $pageInfo
+        ]);
     }
 
     /**
@@ -70,28 +104,25 @@ class RuleController extends Controller {
      * @return  boolean
      */
     function update(Request $request){
+        //必须存在
         if(!$request->filled(['id', 'info'])){
             throw new NormalException(603, 'id|info');
         }
-        $info   = ArrayUtil::leach($request->input('info'), [
-            'pid', 'name', 'url', 'show', 'status', 'icon'
+
+        //若存在，不能为null
+        if (ArrTool::existNull($request->input('info'), ['name', 'url', 'status'])) {
+            throw new NormalException(610, 'info.name|info.url');
+        }
+
+        //提取字段
+        $info = ArrTool::leach($request->input('info'), [
+            'pid', 'name', 'url', 'is_menu', 'status', 'icon'
         ]);
 
-        DB::beginTransaction();
-        try {
-            //菜单信息修改
-            $menu   = Menu::find($request->input('id'));
-            $menu->fill($info);
-            $menu->save();
-
-            //权限信息修改
-            $info   = ArrayUtil::fetchValues($info, ['name', 'url', 'status'], true);
-            Rule::where('id', $menu->rule_id)->update($info);
-
-            DB::commit();
-        }catch(\Exception $e){
-            DB::rollBack();
-            throw $e;
+        //sql操作
+        $result = Rule::where('id', $request->input('id'))->update($info);
+        if ($result <= 0) {
+            throw new NormalException(622, 'adrule');
         }
 
         return response()->api();

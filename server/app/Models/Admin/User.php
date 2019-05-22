@@ -13,15 +13,15 @@ use App\Exceptions\NormalException;
 use SmileYi\Utils\Common;
 use SmileYi\Utils\Format;
 use SmileYi\Utils\Token;
+use SmileYi\Utils\ArrTool;
 
 class User extends Base {
 
     protected $table    = 'ad_user';
     protected $guarded  = [];
 
-    const STATUS_NORMAL = 1;
-    const STATUS_FORBID = 0;
-    const STATUS_DELETE = -1;
+    //默认头像
+    const DEFAULT_AVATAR = 'http://default.smileyi.cn/resource/avatar.jpg';
 
     /**
      * 注册用户
@@ -41,6 +41,7 @@ class User extends Base {
             'nickname' => $info['nickname'] ?? $username,
             'truename' => $info['truename'] ?? null,
             'email' => $info['email'] ?? null, 
+            'mobile' => $info['mobile'] ?? null,
             'password' => Common::md5($password),
             'status' => static::STATUS_NORMAL,
         ]);
@@ -78,7 +79,6 @@ class User extends Base {
      */
     static function login($username, $password){
         $user = User::where(['username' => $username])->first();
-        // var_dump( $user);exit;
         if(!$user || $user->password != Common::md5($password)){
             throw new NormalException(605);
         }
@@ -99,7 +99,32 @@ class User extends Base {
     }
 
     //关联组信息
-    public function groups(){
-        return $this->belongsToMany('App\Models\Admin\Group', 'ad_user_group')->where('status', Group::STATUS_NORMAL);
+    function groups(){
+        return $this->belongsToMany(
+            'App\Models\Admin\Group', 'ad_user_group'
+        )->where('status', Group::STATUS_NORMAL);
+    }
+
+    /**
+     * 字段转义
+     * @param   $level 标识
+     * @return  array [<description>]
+     */
+    function convert($level = 1) {
+        $item = parent::convert($level);
+        if (isset($item['last_login_ip'])){
+            $item['last_login_ip'] = long2ip(intval($item['last_login_ip']));
+        }
+        $item['avatar'] = $item['avatar'] ?? self::DEFAULT_AVATAR;
+
+        //根据隔离级别隐藏字段
+        if ($level == 1) {
+            unset($item['password'], $item['mobile'], $item['token'], $item['token_deadline']);
+        }
+        if ($level == 2) {
+            unset($item['password']);
+        }
+
+        return $item;
     }
 }

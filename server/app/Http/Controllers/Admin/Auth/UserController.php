@@ -15,7 +15,6 @@ use SmileYi\Utils\ArrTool;
 use App\Models\Admin\User;
 use App\Models\Admin\UserGroup;
 use App\Exceptions\NormalException;
-use App\Http\Resources\Admin\User as UserRe;
 
 class UserController extends Controller {
 
@@ -31,8 +30,9 @@ class UserController extends Controller {
         $pageInfo = true;
 
         $list   = User::list($where, $page, $pageInfo)->get();
+
         return response()->api([
-            'list' => UserRe::collection($list), 
+            'list' => $list->convert(),
             'page_info' => $pageInfo
         ]);
     }
@@ -45,7 +45,7 @@ class UserController extends Controller {
      */
     function add(Request $request){
         if(!$request->filled(['username', 'password'])){
-            throw new NormalException(603, 'username||password');
+            throw new NormalException(603, 'username|password');
         }
 
         //用户注册
@@ -55,7 +55,7 @@ class UserController extends Controller {
             $request->all()
         );
 
-        return response()->api(['info' => new UserRe($user)]);
+        return response()->api(['info' => $user->convert()]);
     }
     
     /**
@@ -68,12 +68,12 @@ class UserController extends Controller {
             throw new NormalException(603, 'id');
         }
 
-        $user   = User::find($request->input('id'));
+        $user = User::find($request->input('id'));
         if(!$user){
-            throw new NormalException(621, $request->input('id'));
+            throw new NormalException(621, 'aduser:' . $request->input('id'));
         }
 
-        return response()->api(['info' => new UserRe($user)]);
+        return response()->api(['info' => $user->convert()]);
     }
 
     /**
@@ -83,22 +83,27 @@ class UserController extends Controller {
      * @return  boolean
      */
     function update(Request $request){
-        if(!$request->filled(['id', 'info'])){
+        if (!$request->filled(['id', 'info'])) {
             throw new NormalException(603, 'id|info');
         }
 
-        if(in_array($request->input('id'), config('auth.admin.root_ids'))){
+        //根用户不能修改
+        if (in_array($request->input('id'), config('auth.admin.root_ids'))) {
             throw new NormalException(609);
         }
-        $info   = ArrTool::leach(
-            $request->input('info'), [
-                'nickname', 'truename', 'mobile', 'email', 'status'
-            ]
-        );
 
-        $result     = User::where(['id' => $request->input('id')])->update($info);
+        //若字段存在、不能为空
+        if (ArrTool::existNull($request->input('info'), 'status')) {
+            throw new NormalException(610, 'info.status');
+        }
+        
+        $info   = ArrTool::leach($request->input('info'), [
+            'nickname', 'truename', 'mobile', 'email', 'status'
+        ]);
+
+        $result = User::where(['id' => $request->input('id')])->update($info);
         if($result <= 0){
-            throw new NormalException(622);
+            throw new NormalException(622, 'aduser');
         }
 
         return response()->api();
@@ -123,7 +128,7 @@ class UserController extends Controller {
 
             //添加组信息
             $data = [];
-            foreach($request->input('group_ids') as $groupId){
+            foreach((array)$request->input('group_ids') as $groupId){
                 $data[] = [
                     'user_id' => $request->input('id'),
                     'group_id' => $groupId
@@ -132,9 +137,9 @@ class UserController extends Controller {
             UserGroup::insert($data);
 
             DB::commit();
-        }catch(\Exception $exception){
+        }catch(\Exception $E){
             DB::rollBack();
-            throw $exception;
+            throw $E;
         }
 
         return response()->api();

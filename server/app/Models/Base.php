@@ -13,6 +13,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Base extends Model {
 
+    //状态映射
+    const MAP_STATUS = [
+        1 => '正常',
+        0 => '禁用',
+        -1 => '删除'
+    ];
+
+    const STATUS_NORMAL = 1;
+    const STATUS_BORBID = 0;
+    const STATUS_DELETE = -1;
+
     /**
      * 分页设置
      * @param   &$query
@@ -72,9 +83,23 @@ class Base extends Model {
      */
     static function setWhere($where, $query = null){
         if($query){
-            return $query->where($where)->where('status', '!=', -1);
+            return $query->where($where)->where('status', '!=', static::STATUS_DELETE);
         }else{
-            return static::where($where)->where('status', '!=', -1);
+            return static::where($where)->where('status', '!=', static::STATUS_DELETE);
         }
+    }
+
+    /**
+     * 字段转义
+     * @param   $level 转义等级
+     * @return  array
+     */
+    function convert($level = 1) {
+        $item = parent::toArray();
+        if (isset($item['status'])) {
+            $item['status_text'] = static::MAP_STATUS[$item['status']];
+        }
+
+        return $item;
     }
 }

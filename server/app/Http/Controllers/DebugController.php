@@ -10,24 +10,24 @@
 namespace App\Http\Controllers;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
-use App\Utils\Http;
-use App\Utils\Upload;
+use SmileYi\Utils\Http;
+use SmileYi\Utils\Upload;
 
 class DebugController extends Controller {
 
     //入口
     function index(Request $request){
-        return response()->api([
-            'result' => $this->push()
-        ]);
+        return $request->input('name');
+        return $request->existNull('name') ? 'Yes' : 'No';
+        if ($request->has(['info.name']) && !$request->filled(['info.name'])) {
+            return 'Error';
+        }
+        return 'Success';
+        var_dump(data_get(['name' => ''], 'name'));
     }
 
     //推送
     function push(){
-        return Http::post(
-            'http://data.zz.baidu.com/urls?appid=1595441886555530&token=q578s6atGrtBNSqt&type=homepage',
-            'http://faq.uuu9.com/faq/show/4.html'
-        );
     }
 
     //上传
