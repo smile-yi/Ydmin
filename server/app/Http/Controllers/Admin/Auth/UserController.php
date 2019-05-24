@@ -12,6 +12,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use SmileYi\Utils\ArrTool;
+use SmileYi\Utils\Format;
 use App\Models\Admin\User;
 use App\Models\Admin\UserGroup;
 use App\Exceptions\NormalException;
@@ -92,14 +93,18 @@ class UserController extends Controller {
             throw new NormalException(609);
         }
 
-        //若字段存在、不能为空
-        if (ArrTool::existNull($request->input('info'), 'status')) {
-            throw new NormalException(610, 'info.status');
+        //status字段限定
+        if ($request->has('info.status') 
+            && !isset(Group::MAP_STATUS[$request->input('info.status')])) {
+            throw new NormalException(611, 'info.status');
         }
         
-        $info   = ArrTool::leach($request->input('info'), [
+        $info = ArrTool::leach($request->input('info'), [
             'nickname', 'truename', 'mobile', 'email', 'status'
         ]);
+        if (empty($info)) {
+            throw new NormalException(610, 'info');
+        }
 
         $result = User::where(['id' => $request->input('id')])->update($info);
         if($result <= 0){
@@ -128,11 +133,17 @@ class UserController extends Controller {
 
             //添加组信息
             $data = [];
-            foreach((array)$request->input('group_ids') as $groupId){
+            foreach($request->input('group_ids') as $groupId){
+                if (!Format::isInteger($group)) {
+                    throw new NormalException(604, 'group_ids');
+                }
                 $data[] = [
                     'user_id' => $request->input('id'),
                     'group_id' => $groupId
                 ];
+            }
+            if (empty($data)) {
+                throw new NormalException(610, 'group_ids');
             }
             UserGroup::insert($data);
 

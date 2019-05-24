@@ -86,9 +86,18 @@ class GroupController extends Controller {
             throw new NormalException(610, 'info');
         }
 
+        //status字段限定
+        if ($request->has('info.status') 
+            && !isset(Group::MAP_STATUS[$request->input('info.status')])) {
+            throw new NormalException(611, 'info.status');
+        }
+
         $info = ArrTool::leach($request->input('info'), [
             'name', 'desc', 'status', 'rule_ids'
         ]);
+        if (empty($info)) {
+            throw new NormalException(610, 'info');
+        }
 
         //格式化权限信息
         isset($info['rule_ids']) && $info['rule_ids'] = json_encode($info['rule_ids']);

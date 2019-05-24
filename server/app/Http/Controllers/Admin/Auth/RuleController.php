@@ -114,10 +114,19 @@ class RuleController extends Controller {
             throw new NormalException(610, 'info.name|info.url');
         }
 
+        //status字段限定
+        if ($request->has('info.status') 
+            && !isset(Rule::MAP_STATUS[$request->input('info.status')])) {
+            throw new NormalException(611, 'info.status');
+        }
+
         //提取字段
         $info = ArrTool::leach($request->input('info'), [
             'pid', 'name', 'url', 'is_menu', 'status', 'icon'
         ]);
+        if (empty($info)) {
+            throw new NormalException(610, 'info');
+        }
 
         //sql操作
         $result = Rule::where('id', $request->input('id'))->update($info);

@@ -18,8 +18,8 @@ class CreateAdGroup extends Migration
             $table->string('name', 20)->comment('名称');
             $table->string('desc', 100)->nullable()->comment('描述');
             $table->text('rule_ids')->nullable()->comment('权限ID集 json');
-            $table->tinyInteger('status')->default(1)
-                ->comment('状态:1.正常;0.禁用;-1.删除');
+            $table->tinyInteger('status')->default(1)->unsigned()
+                ->comment('状态:1.正常;2.禁用;9.删除');
             $table->timestamps();
         });
 

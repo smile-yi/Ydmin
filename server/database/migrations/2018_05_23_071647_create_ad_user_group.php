@@ -17,6 +17,7 @@ class CreateAdUserGroup extends Migration
             $table->increments('id');
             $table->integer('user_id')->nullable();
             $table->integer('group_id')->nullable();
+            $table->index('user_id');
         });
     }
 

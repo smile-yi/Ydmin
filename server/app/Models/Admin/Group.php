@@ -18,10 +18,6 @@
         'rule_ids'  => 'array'
     ];
 
-    const STATUS_NORMAL = 1;
-    const STATUS_FORBID = 0;
-    const STATUS_DELETE = -1;
-
     //关联规则信息
     function rules() {
         return Rule::whereIn('id', $this->rule_ids)->get();

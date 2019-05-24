@@ -56,6 +56,7 @@ class AdminController extends Controller {
             throw new NormalException(603, 'info');
         }
 
+        //过滤字段
         $info = ArrTool::leach($request->input('info'), [
             'nickname', 'truename', 'mobile', 'email'
         ]);
@@ -76,7 +77,11 @@ class AdminController extends Controller {
     function menus(Request $request){
         $admin = $request->admin;
 
-        $list = Rule::where('is_menu', 1)->get();
+        $list = Rule::where([
+            'is_menu' => 1,
+            'status' => Rule::STATUS_NORMAL
+        ])->get();
+        
         //过滤无权限菜单
         $list = $list->filter(function($item) use ($admin){
             return Auth::check($admin, $item->url);

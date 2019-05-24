@@ -20,7 +20,7 @@ class CreateAdRule extends Migration
             $table->string('url', 200);
             $table->tinyInteger('is_menu')->default(0)->comment('是否为菜单:1.是;0.否');
             $table->string('icon', 30)->default('fa fa-circle')->comment('图标css类');
-            $table->tinyInteger('status')->default(1)->comment('1.正常;0.禁用;-1.删除');
+            $table->tinyInteger('status')->default(1)->comment('1.正常;2.禁用;9.删除');
             $table->timestamps();
         });
 

@@ -102,7 +102,7 @@ class User extends Base {
     function groups(){
         return $this->belongsToMany(
             'App\Models\Admin\Group', 'ad_user_group'
-        )->where('status', Group::STATUS_NORMAL);
+        )->where('status', '!=', Group::STATUS_DELETE);
     }
 
     /**

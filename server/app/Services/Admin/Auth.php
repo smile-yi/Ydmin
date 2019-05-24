@@ -15,20 +15,21 @@ use App\Models\Admin\{
 
 class Auth {
 
-    private static $authList;
-
     /**
      * 获取用户权限url列表
      * @param   User    $user
      * @return  $list of url
      */
     static function list(User $user){
-        $cacheKey = 'aduser:auth:list:' . $user->id;
+        $cacheKey = 'admin:user:rules:' . $user->id;
         $list = Cache::get($cacheKey);
         if($list === null){
             $groups = $user->groups;
             $ruleIds = [];
             foreach($groups as $group){
+                if ($group->status != Group::STATUS_NORMAL) {
+                    continue;
+                }
                 $ruleIds = array_merge($ruleIds, $group->rule_ids);
             }
             $ruleIds = array_filter($ruleIds);
@@ -48,8 +49,8 @@ class Auth {
      */
     static function check(User $user, $url){
         if(!in_array($user->id, config('auth.admin.root_ids', []))){
-            $auths  = self::list($user);
-            return in_array($url, $auths);
+            $rules  = self::list($user);
+            return in_array($url, $rules);
         }
 
         return true;

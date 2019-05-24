@@ -16,13 +16,13 @@ class Base extends Model {
     //状态映射
     const MAP_STATUS = [
         1 => '正常',
-        0 => '禁用',
-        -1 => '删除'
+        2 => '禁用',
+        9 => '删除'
     ];
 
     const STATUS_NORMAL = 1;
-    const STATUS_BORBID = 0;
-    const STATUS_DELETE = -1;
+    const STATUS_BORBID = 2;
+    const STATUS_DELETE = 9;
 
     /**
      * 分页设置

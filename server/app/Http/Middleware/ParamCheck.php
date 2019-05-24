@@ -42,7 +42,7 @@ class ParamCheck
         $paramIntegers  = ['id'];
         $paramNumbers   = [];
         $paramUrls      = ['image'];
-        $paramArrays    = ['info', 'where'];
+        $paramArrays    = ['info', 'where', 'group_ids'];
 
         $wrapKey and $wrapKey .= '.';
 

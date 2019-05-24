@@ -29,7 +29,7 @@ class CreateAdUser extends Migration
             $table->string('token', 100)->nullable();
             $table->dateTime('token_deadline')->nullable()->comment('token结束日期');
             $table->tinyInteger('status')->nullable()->default(1)
-                ->comment('状态:1.正常;0.禁用;-1.删除');
+                ->comment('状态:1.正常;2.禁用;9.删除');
             $table->timestamps();
 
             $table->unique('token');

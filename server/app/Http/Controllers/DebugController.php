@@ -12,18 +12,19 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use SmileYi\Utils\Http;
 use SmileYi\Utils\Upload;
+use SmileYi\Utils\ArrTool;
+use SmileYi\Utils\Format;
+use App\Models\Admin\User as AdUser;
+use App\Models\Admin\Group as AdGroup;
 
 class DebugController extends Controller {
 
     //入口
     function index(Request $request){
-        return $request->input('name');
-        return $request->existNull('name') ? 'Yes' : 'No';
-        if ($request->has(['info.name']) && !$request->filled(['info.name'])) {
-            return 'Error';
-        }
-        return 'Success';
-        var_dump(data_get(['name' => ''], 'name'));
+        $user = AdUser::where('id', 5)->first();
+        return response()->api([
+            'list' => $user->groups()->where('status', AdGroup::STATUS_NORMAL)->get()
+        ]);
     }
 
     //推送
