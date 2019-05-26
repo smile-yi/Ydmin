@@ -15,6 +15,11 @@ export default new Router({
             meta: { title: '自述文件' },
             children:[
                 {
+                    path: '/admin/auth/user/list',
+                    component: resolve => require(['../components/auth/User.vue'], resolve),
+                    meta: { title: '基础表格' }
+                },
+                {
                     path: '/dashboard',
                     component: resolve => require(['../components/page/Dashboard.vue'], resolve),
                     meta: { title: '系统首页' }

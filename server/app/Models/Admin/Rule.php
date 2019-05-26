@@ -29,6 +29,6 @@ class Rule extends Base {
             $list[$item['pid']]['childs'][] = &$item;
         }
         
-        return $list[0] ?? [];
+        return $list[0]['childs'] ?? [];
     }
 }

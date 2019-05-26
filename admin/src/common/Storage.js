@@ -8,10 +8,10 @@
 
 export default new (function(){
 
-    this.handle  = window.localStorage
+    this.handle  = window.localStorage;
 
     this.time   = function(){
-        return Date.parse(new Date())/1000
+        return Date.parse(new Date())/1000;
     }
 
     /**
