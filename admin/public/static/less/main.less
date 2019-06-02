@@ -1,0 +1,74 @@
+//颜色声明
+@blue : #007BFF;
+@blue-light : #45B3E4;
+
+@orange : #FA846A;
+@orange-light : #FBAB39;
+
+@yellow : #FCD438;
+
+@green : #10d9a3;
+@green-light : #96D156;
+
+@red  : #FF3333;
+
+@gray : #999999;
+@gray-light : #cccccc;
+
+@color-font : #889099;
+
+@color-border-gray : #e9ecef;
+
+@range-sm : 20px;
+@range-xs : 10px;
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.page-login {
+    >.el-header {
+        padding: 10px;
+        >.logo {
+            margin-left: 150px;
+            height: 100%;
+            color: @green;
+            display: inline-block;
+            width: 220px;
+            text-align: center;
+            font-size: 20px;
+            img {
+                height: 100%;
+                vertical-align: middle;
+                margin-right: @range-xs;
+            }
+        }
+    }
+
+    >.el-main {
+        background-color: @green;
+
+        .box-form {
+            margin: 40px 0px;
+            padding: 10px 0px;
+            background-color: #FFF;
+            border-radius: 3px;
+            .form-title {
+                // text-align: center;
+                margin-bottom: 10px;
+                padding: 15px 30px;
+                border-bottom: 1px @color-border-gray solid;
+                font-size: 18px;
+                color: @green;
+            }
+            .el-form { 
+                padding: 20px 30px;
+                .el-form-item__content {
+                    margin-left: none;
+                }
+            }
+        }
+            
+    }
+}
