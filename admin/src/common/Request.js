@@ -1,8 +1,8 @@
 import axios from 'axios';
-import Common from '@/common/Common';
-import Config from '@/common/Config';
-import Notify from '@/common/Notify';
-import App from '@/App';
+import Common from '@/common/Common'
+import Config from '@/common/Config'
+import Notify from '@/common/Notify'
+import App from '@/App'
 
 export default {
     name    : 'request',
@@ -20,7 +20,7 @@ export default {
             var data    = this.parse(res);
             data && callback(data);
         }).catch(error => {
-            console.log(url, error);
+            console.log(url, error)
             Notify.error('网络请求异常，请稍候重试！');
             return false;
         });
@@ -37,7 +37,7 @@ export default {
             var data    = this.parse(res);
             data && callback(data);
         }).catch(error => {
-            console.log(url, error);
+            console.log(url, error)
             Notify.error('网络请求异常，请稍候重试！');
             return false;
         });
@@ -45,17 +45,22 @@ export default {
 
     //解析响应结果
     parse : function(res){
-        var errno  = res.data.errno;
-        var errmsg = res.data.errmsg;
+        if(Math.floor(res.status/100) != 2){
+            Notify.error('网络错误:' + res.status);
+            return false;
+        }
+
+        console.log(res.data)
+        var result  = res.data.result;
         var data = res.data.data;
-        if (errno != 0) {
+        if(result != 'success'){
             //特殊错误码处理
-            switch(errno){
+            switch(data.code){
                 case 601:
-                    Common.route('/login');
+                    Common.route('/login')
                 break;
                 default:
-                    Notify.error(errno + ":" + errmsg);
+                    Notify.error(data.code + ':' + data.message);
                 break;
             }
 
@@ -83,12 +88,12 @@ export default {
 
     //获取api接口地址
     createApi : function(url){
-        url = this.prefix  + url;
+        var url     = this.prefix  + url;
 
         //拼接token
-        var split = url.indexOf('?') == -1 ? '?' : '&';
-        url = url + split + 'token=' + this.token;
+        var split   = url.indexOf('?') == -1 ? '?' : '&';
+        var url     = url + split + 'token=' + this.token;
 
         return url;
     }
-};
+}

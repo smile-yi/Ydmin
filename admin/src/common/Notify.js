@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from 'vue'
 export default {
 
     //成功
@@ -10,7 +10,7 @@ export default {
             'title' : title,
             'message'   : text,
             'type'  : 'success'
-        });
+        })
     },
 
     //失败
@@ -22,7 +22,7 @@ export default {
             'title' : title,
             'message'   : text,
             'type'  : 'warning',
-        });
+        })
     },
 
     //通知
@@ -34,6 +34,6 @@ export default {
             'title' : title,
             'message'   : text,
             'type'  : 'info'
-        });
+        })
     }
-};
+}

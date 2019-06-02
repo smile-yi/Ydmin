@@ -38,17 +38,17 @@ export default {
     
     //去页面
     toUrl : function(url){
-        window.open('/#' + url, '_self');
+        window.open('/#' + url, '_self')
     },
 
     //字符串裁剪
     stringCut : function(string, length, postfix){
-        postfix = postfix || '...';
+        var postfix = postfix || '...'
 
         if(string.length > length){
-            return string.substr(0, length) + postfix;
+            return string.substr(0, length) + postfix
         }else{
-            return string;
+            return string
         }
     }
-};
+}

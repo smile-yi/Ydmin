@@ -1,0 +1,86 @@
+
+.el-button {
+    // border-radius: 0px;
+    &.el-button--micro {
+        padding: 3px 5px;
+    }
+}
+// .el-button-group {
+//     >.el-button {
+//         &:last-child {
+//             border-radius: 0px;
+//         }
+//         &:first-child {
+//             border-radius: 0px;
+//         }
+//         &:first-child:last-child {
+//             border-radius: 0px;
+//         }
+//     }
+// }
+
+//辅助类
+.float-right {
+    float: right;
+}
+.align-center {
+    text-align: center;
+}
+
+//模态窗
+.el-dialog {
+    >.el-dialog__body {
+        >.el-form {
+            width: 70%;
+            margin-left: 10%;
+
+            .el-select {
+                display: block;
+            }
+
+            .upload-icon {
+                .img {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 4px;
+                    vertical-align: middle;
+                }
+            }
+
+            .el-textarea__inner {
+                resize: none;
+            }
+        }
+    }
+}
+
+//富文本框字体设置
+textarea {
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    resize: none;
+}
+
+//晃动特效
+.box-shake:hover .shake-target {
+    animation:0.8s shake ease-in alternate;
+}
+@keyframes shake{
+    0% {
+        transform: rotate(0deg);
+    }
+    20% {
+        transform: rotate(-40deg);
+    }
+    40% {
+        transform: rotate(40deg);
+    }
+    60% {
+        transform: rotate(-20deg);
+    }
+    80% {
+        transform: rotate(20deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}

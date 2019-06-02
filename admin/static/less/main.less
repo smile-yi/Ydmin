@@ -1,0 +1,346 @@
+//颜色声明
+@blue : #007BFF;
+@blue-light : #45B3E4;
+@orange : #FA846A;
+@orange-light : #FBAB39;
+@yellow : #FCD438;
+@green : #10d9a3;
+@green-light : #96D156;
+@red  : #FF3333;
+@gray : #999999;
+@gray-light : #cccccc;
+@gray-font : #889099;
+@border-color : #e9ecef;
+@gap-sm : 20px;
+
+body{
+    margin:0px;
+    padding:0px;
+    overflow-y: scroll;
+}
+
+.login.el-container {
+    .el-header {
+        height: 80px;
+        padding: 0px 100px;
+        >.logo {
+            >* {
+                display:inline-block;
+                vertical-align:middle
+            }
+            >img {
+                height: 60px;
+                margin-right: 10px;
+            }
+            font-size: 25px;
+            color: @green;
+            line-height: 80px;
+        }
+    }
+    .el-main {
+        background-color: @green;
+        padding: 40px 0px;
+        .box-form {
+            background-color: #FFF;
+            max-width: 350px;
+            width: 100%;
+            border-radius: 3px;
+            padding: 30px 30px;
+            display: inline-block;
+            >.title {
+                text-align: left;
+                color: @green;
+                padding: 10px 0px;
+                font-size: 18px;
+                border-bottom: @border-color 1px solid;
+                margin-bottom: @gap-sm;
+            }
+        }
+    }
+    .el-footer {
+        color: @gray-font;
+        font-size: 12px;
+        text-align: center;
+        padding: 20px 0px;
+    }
+}
+.app.el-container {
+    >.el-header {
+        background-color: #409EFF;
+        padding: 0px;
+    }
+    >.el-container {
+        >.el-aside {
+            // background-color: #409EFF;
+            overflow-x: hidden;
+        }
+    }
+}
+
+//顶部header样式
+.header {
+    background:-webkit-gradient(linear, 0% 0%, 100% 100%,from(#199ce2), to(#04c5b0));
+    background:-moz-linear-gradient(left, #199ce2, #04c5b0);
+    .box-logo {
+        display: inline-block;
+        width: 225px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.1);
+        line-height: 60px;
+        color: #FFF;
+        font-size: 18px;
+        >img {
+            height: 45px;
+            display:inline-block;
+            vertical-align:middle;
+            margin-right: 5px;
+        }
+    }
+    .box-user {
+        float: right;
+        display: inline-block;
+        width: 200px;
+
+        >div {
+            display: inline-block;
+            float: left;
+            &.headimg {
+                width: 60px;
+                text-align: center;
+                >img {
+                    width: 40px;
+                    margin-top: 10px;
+                }
+            }
+            &.username {
+                width: 100px;
+                color: #FFF;
+                padding-top: 18px;
+                height: auto;
+            }
+            
+            &.el-dropdown {
+                display: inline-block;
+                height: 30px;
+                margin-top: 12px;
+            }
+        }
+    }
+}
+
+.header-dropdown {
+    .el-dropdown-menu__item {
+        text-align: center;
+        min-width: 100px;
+
+        &.button-item{
+            &:hover {
+                background-color: transparent;
+            }
+        }
+    }
+}
+
+//侧边菜单
+.sider {
+    .el-collapse-item__header {
+        height: 40px;
+        line-height: 40px;
+        padding: 0px 10px;
+        color: #909399;
+        transition-duration: 0.1s;
+        .el-collapse-item__arrow {
+            line-height: 40px;
+        }
+        .fa {
+            font-size: 18px;
+            display: inline-block;
+            width: 26px;
+            text-align: center;
+            float: left;
+            margin-top: 11px;
+            color: #45B3E4;
+        }
+        &:hover {
+            background-color: #EEE;
+            cursor: pointer;
+        }
+        &.is-active {
+            background-color: #F7F7F7;
+        }
+    }
+    .el-collapse-item__content{
+        padding-bottom: 0px;
+        color: #909399;
+        >.child {
+            color: #909399;            
+            text-decoration: none;
+            display: block;
+            height: 35px;
+            line-height: 35px;
+            padding-left: 10px;
+            transition-duration: 0.1s;
+            border-bottom: 1px solid #ebeef5;
+            &:last-child {
+                border-bottom: none;
+            }
+            &:hover {
+                // background-color: #F7F7F7;
+                color: #b0b3b9;
+                cursor: pointer;
+            }
+            >.fa {
+                font-size: 12px;
+                display: inline-block;
+                width: 26px;
+                text-align: center;
+                float: left;
+                margin-top: 12px;
+                color: #45B3E4;
+            }
+        }
+    }
+}
+
+//内容
+.bodyer{
+    >.title {
+        font-size: 16px;
+        color: @gray-font;
+        border-left: @green 4px solid;
+        padding-left: 5px;
+        margin-bottom: @gap-sm;
+    }
+
+    >.content {
+        border: @border-color 1px solid;
+        padding: 20px;
+        min-height: 400px;
+        >div {
+            margin-bottom: @gap-sm;
+        }
+
+        >.box-ops {
+            border-bottom: @gray-light 1px solid;
+            padding-bottom: 10px;
+
+            >.search-keyword {
+                width: 300px;
+            }
+            >.search-date {
+                width: 400px;
+            }
+        }
+
+        >.box-cont {
+            // padding: 10px 0px;
+            .el-table {
+                .icon {
+                    width: 40px;
+                    height: 40px;
+                    vertical-align: middle;
+                }
+            }
+            &.list {
+                >.nav-tabs {
+                    >.nav-item >.nav-link {
+                        min-width: 80px;
+                        border-radius: 0px;
+                        text-align: center;
+                        &.active {
+                            background-color: #f9fafe;
+                            border-bottom-color: #f9fafe;
+                            font-weight: bold;
+                            color: #000;
+                        }
+                    }
+                }
+            }
+
+            &.textarea {
+                .text {
+                    height: 500px;
+                }
+            }
+        }
+    } 
+}
+
+//角色权限分配模态窗样式
+.box-rules {
+    padding-left: 20px;
+    >.rule {
+        border-left: @border-color 3px solid;
+        padding-left: 5px;
+        margin: 10px 0px 0px 0px;
+    }
+}
+
+//菜单树样式
+.box-cont.list-menu-tree {
+    .el-collapse {
+        border-top: none;
+        border-bottom: none;
+        
+        .el-collapse-item {
+            &:last-child {
+                margin-bottom: 0px;
+            }
+
+            .el-collapse-item__header{
+                &.is-active {
+                    border-bottom: 1px solid #ebeef5;
+                }
+            }
+        }
+        
+    }
+    .el-collapse-item__arrow {
+        float: left;
+        margin: 0px 5px;
+    }
+    .el-collapse-item__wrap {
+        border:none;
+    }
+    .el-collapse-item__content {
+        padding-bottom : 0px;
+        // padding-left: 20px;
+    }
+
+    .menu-item {
+        height: 48px;
+        line-height: 48px;
+        border-bottom: 1px solid #ebeef5;
+        // padding-left: 23px;
+        .fa {
+            float: left;
+            margin: 19px 3px 0px 9px;
+            color: #FFF;
+        }
+    }
+
+    .el-button-group.float-right {
+        margin-top: 13px;
+        margin-right: 20px;
+    }
+}
+
+.btn-icon {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    transition-duration: 0.3s;
+    &:before {
+        left: 50%;
+        position: relative;
+        top: 25%;
+        left: 25%;
+        color: #FFF;
+    }
+    &:hover {
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+}

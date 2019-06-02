@@ -9,5 +9,5 @@
 export default {
 
     //后台地址
-    api_url : 'http://api.admin.local.com',
-};
+    api_url : 'http://u9faq.local.com',
+}

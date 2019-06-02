@@ -1,6 +1,6 @@
 <template>
     <div class='bodyer'>
-        <div class='title'>用户列表</div>
+        <div class='title'>角色列表</div>
         <div class='content' v-loading='loading'>
             <div class='box-ops'>
                 <el-button-group>
@@ -10,10 +10,9 @@
             <div class='box-cont'>
                 <el-table :data='list' border>
                     <el-table-column prop='id' label='#ID' width='50px'></el-table-column>
-                    <el-table-column prop='nickname' label='#昵称'></el-table-column>
-                    <el-table-column prop='username' label='#用户名'></el-table-column>
-                    <el-table-column prop='login_count' label='#登录次数'></el-table-column>
-                    <el-table-column prop='last_login_ip' label='#登录IP'></el-table-column>
+                    <el-table-column prop='name' label='#名称'></el-table-column>
+                    <el-table-column prop='depict' label='#描述'></el-table-column>
+                    <!-- <el-table-column prop='created_at' label='#创建'></el-table-column> -->
                     <el-table-column label='#状态' width='100px'>
                         <template slot-scope='scope'>
                             <el-tag :type='scope.row.status == 1 ? "success" : "warning"' size='mini'>
@@ -25,11 +24,11 @@
                         <template slot-scope='scope'>
                             <el-button-group>
                                 <el-button size='micro' type='primary' 
-                                    @click='get_item(scope.row.id)'>
+                                    @click='get_item(scope.row)'>
                                     详情
                                 </el-button>
                                 <el-button size='micro' type='primary' 
-                                    @click='get_groups(scope.row)'>
+                                    @click='get_rules(scope.row)'>
                                     授权
                                 </el-button>
                                 <el-button size='micro' type='warning' 
@@ -60,13 +59,13 @@
         </div>
 
         <!-- 添加 -->
-        <el-dialog title='用户添加' :visible.sync='dialog.add' width='800px'>
-            <el-form :model='aItem' label-width='100px' label-position='right' :rules='rules.user_add'>
-                <el-form-item label='用户名:' prop='username'>
-                    <el-input v-model='aItem.username'></el-input>
+        <el-dialog title='角色添加' :visible.sync='dialog.add' width='800px'>
+            <el-form :model='aItem' label-width='100px' label-position='right' :rules='rules'>
+                <el-form-item label='名称:' prop='name'>
+                    <el-input v-model='aItem.name'></el-input>
                 </el-form-item>
-                <el-form-item label='密码:' prop='password'>
-                    <el-input v-model='aItem.password' type='password'></el-input>
+                <el-form-item label='描述:' prop='depict'>
+                    <el-input v-model='aItem.depict' type='textarea' rows='5'></el-input>
                 </el-form-item>
             </el-form>
 
@@ -77,22 +76,13 @@
         </el-dialog>
 
         <!-- 编辑 -->
-        <el-dialog title='用户编辑' :visible.sync='dialog.update' width='800px'>
-            <el-form :model='nItem' label-width='100px' label-position='right' :rules='rules.user_update'>
-                <el-form-item label='用户名:'>
-                    <el-input v-model='nItem.username' disabled></el-input>
+        <el-dialog title='角色编辑' :visible.sync='dialog.update' width='800px'>
+            <el-form :model='nItem' label-width='100px' label-position='right' :rules='rules'>
+                <el-form-item label='名称:' prop='name'>
+                    <el-input v-model='nItem.name'></el-input>
                 </el-form-item>
-                <el-form-item label='昵称:'>
-                    <el-input v-model='nItem.nickname'></el-input>
-                </el-form-item>
-                <el-form-item label='真实姓名:'>
-                    <el-input v-model='nItem.truename'></el-input>
-                </el-form-item>
-                <el-form-item label='手机号:' prop='mobile'>
-                    <el-input v-model='nItem.mobile'></el-input>
-                </el-form-item>
-                <el-form-item label='邮箱:' prop='email'>
-                    <el-input v-model='nItem.email'></el-input>
+                <el-form-item label='描述:' prop='depict'>
+                    <el-input v-model='nItem.depict' type='textarea' rows='5'></el-input>
                 </el-form-item>
             </el-form>
 
@@ -103,17 +93,29 @@
         </el-dialog>
 
         <!-- 授权 -->
-        <el-dialog title='用户授权' :visible.sync='dialog.update_groups' width='800px'>
-            <el-checkbox-group v-model='nUserGroups'>
-                <el-row>
-                    <el-col :span='6' v-for='group in nGroups' :key='group.id'>
-                        <el-checkbox :label='group.id'>{{group.name}}</el-checkbox>
-                    </el-col>
-                </el-row>
-            </el-checkbox-group>
+        <el-dialog title='角色授权' :visible.sync='dialog.rules' width='800px'>
+            <el-scrollbar>
+                <el-checkbox-group v-model='rules_selected' style='height: 40vh;'>
+                    <div class='box-rules first'>
+                        <div class='rule' v-for='rule in auth_rules'>
+                            <el-checkbox :label='rule.id'>{{rule.name}}</el-checkbox>
+                            <div class='box-rules second'>
+                                <div class='rule' v-for='crule in rule.child'>
+                                    <el-checkbox :label='crule.id'>{{crule.name}}</el-checkbox>
+                                    <el-row class='box-rules third'>
+                                        <el-col :span='6' v-for='ccrule in crule.child' :key='ccrule.id'>
+                                            <el-checkbox :label='ccrule.id'>{{ccrule.name}}</el-checkbox>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </el-checkbox-group>
+            </el-scrollbar>
             <div slot='footer' class='dialog-footer'>
-                <el-button @click='dialog.update_groups = false'>取消</el-button>
-                <el-button type='primary' @click='update_groups(nItem.id, nUserGroups)'>确定</el-button>
+                <el-button @click='dialog.rules = false'>取消</el-button>
+                <el-button type='primary' @click='update_rules(nItem, rules_selected)'>确定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -128,35 +130,19 @@ export default {
             'list'  : [],
             'count' : 100,
             'page'  : 1,
-            'msg'   : 'admin/auth/user',
             'dialog': {
-                'add'   : false,
-                'update': false,
-                'update_groups' : false
+                'add'  : false,
+                'update'   : false,
+                'rules' : false
             },
             'aItem' : {},
             'nItem' : {},
-            'nGroups' : [],
-            'nUserGroups' : [],
-            'loading' : false,
             'rules' : {
-                'user_add'  : {
-                    'username'  : [{'required' : true, 'message' : '请输入用户名'}],
-                    'password'  : [{'required' : true, 'message' : '请输入密码'}]
-                },
-                'user_update'  : {
-                    'mobile'    : [{
-                        'pattern'   : /^1\d{10}$/,
-                        'message'   : '手机号格式错误',
-                        'trigger'   : 'blur'
-                    }],
-                    'email' : [{
-                        'pattern'   : /^\w+@\w+\.com$/,
-                        'message'   : '邮箱格式错误',
-                        'trigger'   : 'blur'
-                    }]
-                }
-            }
+                
+            },
+            'loading'   : true,
+            'auth_rules' : false,
+            'rules_selected' : []
         }
     },
     created : function(){
@@ -165,19 +151,19 @@ export default {
     methods : {
         get_list    : function(page){
             var page    = page || 1
-            var url     = Request.createApi('/admin/auth/user/list?page='+page)
+            var url     = Request.createApi('/admin/auth/group/list?page='+page)
             Request.get(url, res => {
+                this.loading    = false
                 this.list   = res.list
                 this.count  = res.page_info.count;
                 this.page   = page
-                this.loading    = false
             })
 
             this.loading    = true
         },
 
         add_item    : function(info){
-            var url     = Request.createApi('/admin/auth/user/add')
+            var url     = Request.createApi('/admin/auth/group/add')
             Request.post(url, info, res => {
                 this.dialog.add    = false
                 this.get_list()
@@ -186,16 +172,13 @@ export default {
             })
         },
 
-        get_item    : function(id){
-            var url     = Request.createApi('/admin/auth/user/detail?id='+id)
-            Request.get(url, res => {
-                this.nItem  = res.info
-                this.dialog.update     = true
-            })
+        get_item    : function(item){
+            this.nItem  = item
+            this.dialog.update  = true
         },
 
         update_item : function(id, info){
-            var url     = Request.createApi('/admin/auth/user/update');
+            var url     = Request.createApi('/admin/auth/group/update');
             var param   = {
                 'id'    : id,
                 'info'  : info
@@ -208,30 +191,29 @@ export default {
             })
         },
 
-        get_groups  : function(user){
-            var url = Request.createApi('/admin/auth/group/list?user_id='+user.id)
-            Request.get(url, res => {
-                for(var k in res.list) {
-                    var group   = res.list[k]
-                    if(group.user_in){
-                        this.nUserGroups.push(group.id)
-                    }
-                }
-                this.nGroups    = res.list
-                this.dialog.update_groups   = true
-            })
-            this.nItem  = user
+        get_rules   : function(item){
+            this.nItem  = item
+            this.rules_selected     = item.rule_ids ? item.rule_ids : []
+            if(this.auth_rules === false){
+                var url     = Request.createApi('/admin/auth/menu/list')
+                Request.get(url, res => {
+                    this.auth_rules     = res.list
+                })
+            }
+            this.dialog.rules    = true;
         },
 
-        update_groups   : function(id, groupIds){
-            var url = Request.createApi('/admin/auth/user/update-groups')
+        update_rules    : function(item, rule_ids){
+            var url     = Request.createApi('/admin/auth/group/update-rules')
             var param   = {
-                'id'    : id,
-                'group_ids' : groupIds 
+                'id'    : item.id,
+                'rule_ids'  : rule_ids
             }
 
             Request.post(url, param, res => {
-                this.dialog.update_groups   = false
+                this.dialog.rules    = false
+                this.get_list(this.page)
+
                 Notify.success('修改成功')
             })
         }

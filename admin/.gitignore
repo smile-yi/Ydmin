@@ -1,16 +1,11 @@
 .DS_Store
-node_modules
-/dist
-example.html
-favicon.ico
-# local env files
-.env.local
-.env.*.local
-
-# Log files
+node_modules/
+/dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/test/e2e/reports/
+selenium-debug.log
 
 # Editor directories and files
 .idea
@@ -19,4 +14,6 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
-*.sw*
+
+# user add
+src/common/Config.js
