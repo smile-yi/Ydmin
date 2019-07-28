@@ -139,14 +139,77 @@ body {
     }
     >.body {
         border: @color-border-gray 1px solid;
-        padding: 20px;
+        padding: 14px;
         >.execute {
             margin-bottom: 20px;
         }
-        .el-table {
+        >.content {
             .el-button--mini {
                 padding: 4px 8px;
             }
+
+            &.list-menu-tree {
+                .el-collapse {
+                    border-top: none;
+                    border-bottom: none;
+                    
+                    .el-collapse-item {
+                        &:last-child {
+                            margin-bottom: 0px;
+                        }
+
+                        .el-collapse-item__header{
+                            &.is-active {
+                                border-bottom: 1px solid #ebeef5;
+                            }
+                        }
+                    }
+                    
+                }
+                .el-collapse-item__arrow {
+                    float: left;
+                    margin: 0px 5px;
+                }
+                .el-collapse-item__wrap {
+                    border:none;
+                }
+                .el-collapse-item__content {
+                    padding-bottom : 0px;
+                    // padding-left: 20px;
+                }
+
+                .menu-item {
+                    height: 48px;
+                    line-height: 48px;
+                    border-bottom: 1px solid #ebeef5;
+                    // padding-left: 23px;
+                    .fa {
+                        float: left;
+                        margin: 19px 3px 0px 9px;
+                        color: #FFF;
+                    }
+                }
+
+                .el-button-group.float-right {
+                    margin-top: 13px;
+                    margin-right: 20px;
+                }
+            }
         }
+    }
+}
+
+//角色权限分配模态窗样式
+.box-rules {
+    padding-left: 20px;
+    >.rule {
+        border-left: @color-border-gray 3px solid;
+        padding-left: 5px;
+        margin: 12px 0px;
+    }
+
+    .third .rule {
+        border: none;
+        margin: 6px 0px;
     }
 }

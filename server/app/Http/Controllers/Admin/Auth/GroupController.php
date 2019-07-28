@@ -14,6 +14,7 @@ use App\Models\Admin\Group;
 use App\Models\Admin\UserGroup;
 use App\Exceptions\NormalException;
 use SmileYi\Utils\ArrTool;
+use SmileYi\Utils\Log;
 
 class GroupController extends Controller {
 
@@ -50,7 +51,7 @@ class GroupController extends Controller {
         $page = $request->input('page', 1);
         $pageInfo = [];
 
-        $list   = Group::list([], $page, $pageInfo)->get();
+        $list = Group::list([], $page, $pageInfo)->get();
         // 判断用户是否在组中
         if ($userId) {
             $userGroupIds = UserGroup::where('user_id', $userId)->pluck('group_id')->toArray();
@@ -81,24 +82,21 @@ class GroupController extends Controller {
             throw new NormalException(603, 'id|info');
         }
 
-        //若存在，则不能为null
-        if (ArrTool::existNull($request->input('info'), ['name', 'status'])) {
-            throw new NormalException(610, 'info');
-        }
+        // //若存在，则不能为null
+        // if (ArrTool::existNull($request->input('info'), ['name', 'status'])) {
+        //     throw new NormalException(610, 'info');
+        // }
 
         //status字段限定
-        if ($request->has('info.status') 
-            && !isset(Group::MAP_STATUS[$request->input('info.status')])) {
+        if ($request->has('info.status') && !isset(Group::MAP_STATUS[$request->input('info.status')])) {
             throw new NormalException(611, 'info.status');
         }
-
         $info = ArrTool::leach($request->input('info'), [
             'name', 'desc', 'status', 'rule_ids'
         ]);
         if (empty($info)) {
             throw new NormalException(610, 'info');
         }
-
         //格式化权限信息
         isset($info['rule_ids']) && $info['rule_ids'] = json_encode($info['rule_ids']);
         $result = Group::where(['id' => $request->input('id')])->update($info);

@@ -4,6 +4,8 @@ import Router from 'vue-router';
 import Login from '@/components/Login.vue'
 import Home from '@/components/Home.vue'
 import AuthUser from '@/components/auth/User.vue'
+import AuthGroup from '@/components/auth/Group.vue'
+import AuthMenu from '@/components/auth/Menu.vue'
 
 Vue.use(Router);
 
@@ -19,6 +21,14 @@ export default new Router({
                 {
                     path: '/admin/auth/user/list',
                     component: AuthUser
+                },
+                {
+                    path: '/admin/auth/group/list',
+                    component: AuthGroup
+                },
+                {
+                    path: '/admin/auth/menu/list',
+                    component: AuthMenu
                 }
             ]
         },

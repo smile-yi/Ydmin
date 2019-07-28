@@ -1,33 +1,33 @@
 <template>
-    <div class='bodyer'>
+    <div class='page-container'>
         <div class='title'>菜单列表</div>
-        <div class='content' v-loading='loading'>
-            <div class='box-ops'>
+        <div class='body' v-loading='loading'>
+            <div class='execute'>
                 <el-button-group>
                     <el-button type='primary' @click="dialog.add = true">添加</el-button>
                 </el-button-group>
             </div>
-            <div class='box-cont list-menu-tree'>
+            <div class='content list-menu-tree '>
                 <el-collapse>
                     <el-collapse-item v-for='menu in list' :key='menu.id' label='ok'>
                         <!-- 一级菜单 -->
                         <template slot='title'>
-                            <el-row>
+                            <el-row style='width:100%'>
                                 <el-col :span='6'>{{menu.name}}</el-col>
                                 <el-col :span='6'>{{menu.url}}</el-col>
                                 <el-col :span='6' class='align-center'>
                                     <el-tag :type='menu.show == 1 ? "success" : "warning"' size='mini'>
-                                        {{['隐藏', '显示'][menu.show]}}
+                                        {{['隐藏', '显示'][menu.is_menu]}}
                                     </el-tag>
                                 </el-col>
                                 <el-col :span='5' class='float-right'>
                                     <el-button-group class='float-right'>
-                                        <el-button size='micro' type='primary' 
-                                            @click.capture.stop='get_item(menu)'>
+                                        <el-button size='mini' type='primary' 
+                                            @click.capture.stop='getItem(menu)'>
                                             详情
                                         </el-button>
-                                        <el-button size='micro' type='danger'
-                                            @click.capture.stop='update_item(menu.id, {"status" : -1})'>
+                                        <el-button size='mini' type='danger'
+                                            @click.capture.stop='updateItem(menu.id, {"status" : -1})'>
                                             删除
                                         </el-button>
                                     </el-button-group>
@@ -49,12 +49,12 @@
                                             </el-col>
                                             <el-col :span='5' class='float-right'>
                                                 <el-button-group class='float-right'>
-                                                    <el-button size='micro' type='primary' 
-                                                        @click.capture.stop='get_item(cmenu)'>
+                                                    <el-button size='mini' type='primary' 
+                                                        @click.capture.stop='getItem(cmenu)'>
                                                         详情
                                                     </el-button>
-                                                    <el-button size='micro' type='danger'
-                                                        @click.capture.stop='update_item(cmenu.id, {"status" : -1})'>
+                                                    <el-button size='mini' type='danger'
+                                                        @click.capture.stop='updateItem(cmenu.id, {"status" : -1})'>
                                                         删除
                                                     </el-button>
                                                 </el-button-group>
@@ -76,12 +76,12 @@
                                         </el-col>
                                         <el-col :span='5' class='float-right'>
                                             <el-button-group class='float-right'>
-                                                <el-button size='micro' type='primary' 
-                                                    @click.capture.stop='get_item(ccmenu)'>
+                                                <el-button size='mini' type='primary' 
+                                                    @click.capture.stop='getItem(ccmenu)'>
                                                     详情
                                                 </el-button>
-                                                <el-button size='micro' type='danger'
-                                                    @click.capture.stop='update_item(ccmenu.id, {"status" : -1})'>
+                                                <el-button size='mini' type='danger'
+                                                    @click.capture.stop='updateItem(ccmenu.id, {"status" : -1})'>
                                                     删除
                                                 </el-button>
                                             </el-button-group>
@@ -124,7 +124,7 @@
 
             <div slot='footer' class='dialog-footer'>
                 <el-button @click='dialog.add = false'>取消</el-button>
-                <el-button type='primary' @click='add_item(aItem)'>确定</el-button>
+                <el-button type='primary' @click='addItem(aItem)'>确定</el-button>
             </div>
         </el-dialog>
 
@@ -157,7 +157,7 @@
 
             <div slot='footer' class='dialog-footer'>
                 <el-button @click='dialog.update = false'>取消</el-button>
-                <el-button type='primary' @click='update_item(nItem.id, nItem)'>确定</el-button>
+                <el-button type='primary' @click='updateItem(nItem.id, nItem)'>确定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -187,55 +187,55 @@ export default {
         }
     },
     created : function(){
-        this.get_list()
+        this.getList()
     },
     methods : {
-        get_list    : function(){
-            var url     = Request.createApi('/admin/auth/menu/list')
+        getList: function(){
+            var url = Request.createApi('/admin/auth/rule/list')
             Request.get(url, res => {
-                this.list   = res.list
-                this.load_pid_options()
-                this.loading    = false
+                this.list = res.list
+                this.loadPidOptions()
+                this.loading = false
             })
 
-            this.loading    = true
+            this.loading = true
         },
 
-        get_item    : function(item){
-            this.nItem  = item
-            this.nItem.show     = String(item.show)
-            this.nItem.pid     = String(item.pid)
-            this.dialog.update  = true;
+        getItem: function(item){
+            this.nItem = item
+            this.nItem.show = String(item.show)
+            this.nItem.pid = String(item.pid)
+            this.dialog.update = true;
         },
 
-        add_item    : function(item){
-            var url     = Request.createApi('/admin/auth/menu/add')
+        addItem: function(item){
+            var url = Request.createApi('/admin/auth/rule/add')
             Request.post(url, item, res => {
-                this.dialog.add     = false
-                this.get_list()
+                this.dialog.add = false
+                this.getList()
 
                 Notify.success('添加成功')
             })
         },
 
-        update_item : function(id, info){
-            var url     = Request.createApi('/admin/auth/menu/update')
-            var param   = {
-                'id'    : id,
-                'info'  : info
+        updateItem: function(id, info){
+            var url = Request.createApi('/admin/auth/rule/update')
+            var param = {
+                'id': id,
+                'info': info
             }
 
             Request.post(url, param, res => {
                 this.dialog.update  = false
-                this.get_list()
+                this.getList()
 
                 Notify.success('修改成功')
             })
         },
 
         //加载父类菜单选项
-        load_pid_options    : function(){
-            this.pid_options    = this.get_pid_options(this.list, 1)
+        loadPidOptions    : function(){
+            this.pid_options    = this.getPidOptions(this.list, 1)
 
             this.pid_options.splice(0, 0, {
                 'name'  : '顶级菜单',
@@ -243,19 +243,19 @@ export default {
             })
         },
 
-        get_pid_options     : function(list, level){
-            var pid_options     = []
-            var level   = level || 1
+        getPidOptions: function(list, level){
+            var pid_options = []
+            var level = level || 1
 
             for(let k in list){
-                let menu    = list[k]
+                let menu = list[k]
                 pid_options.push({
-                    'name'  : Common.getBatchString('|--', level) + menu.name,
-                    'id'    : String(menu.id)
+                    'name' : Common.getBatchString('|--', level) + menu.name,
+                    'id' : String(menu.id)
                 })
 
                 if(menu.child){
-                    let childs  = this.get_pid_options(menu.child, level + 1)
+                    let childs  = this.getPidOptions(menu.child, level + 1)
                     for(let k in childs){
                         pid_options.push(childs[k])
                     }

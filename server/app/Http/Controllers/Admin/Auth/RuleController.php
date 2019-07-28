@@ -82,7 +82,7 @@ class RuleController extends Controller {
                 throw new NormalException(621, 'adgroup');
             }
             foreach ($list as $item) {
-                $item->group_in = in_array($item->id, $group->rule_ids);
+                $item->group_in = in_array($item->id, $group->rule_ids ?? []);
             }
         }
 

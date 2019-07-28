@@ -37,7 +37,7 @@ class Base extends Model {
             intval($pageInfo['limit']) : config('app.page.limit');
         $offset = ($page - 1) * $limit;
 
-        if($pageInfo){
+        if($pageInfo !== false){
             $count  = (clone $query)->count();
             $pageInfo   = [
                 'count' => $count,
