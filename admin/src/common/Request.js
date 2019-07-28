@@ -45,29 +45,22 @@ export default {
 
     //解析响应结果
     parse : function(res){
-        if(Math.floor(res.status/100) != 2){
-            Notify.error('网络错误:' + res.status);
-            return false;
-        }
-
-        console.log(res.data)
-        var result  = res.data.result;
-        var data = res.data.data;
-        if(result != 'success'){
+        var res = res.data;
+        if( res.errno != '0'){
             //特殊错误码处理
-            switch(data.code){
+            switch(res.errno){
                 case 601:
                     Common.route('/login')
                 break;
                 default:
-                    Notify.error(data.code + ':' + data.message);
+                    Notify.error(res.errno + ':' + res.errmsg);
                 break;
             }
 
             return false;
         }
         
-        return data;
+        return res.data;
     },
 
     //拼接get参数

@@ -27,6 +27,7 @@ body {
     padding: 0px;
 }
 
+// 登录页面
 .page-login {
     >.el-header {
         padding: 10px;
@@ -70,5 +71,82 @@ body {
             }
         }
             
+    }
+}
+
+// header样式
+.util-header {
+    >.header {
+        background:-webkit-gradient(linear, 0% 0%, 100% 100%,from(#199ce2), to(#04c5b0));
+        background:-moz-linear-gradient(left, #199ce2, #04c5b0);
+        height: 70px;
+        margin: 0px -20px;
+
+        >.logo {
+            background-color: rgba(255, 255, 255, 0.1);
+            display: inline-block;
+            width: 225px;
+            height: 55px;
+            padding-top: 15px;
+            text-align: center;
+            color: #FFF;
+            font-size: 20px;
+            >img {
+                vertical-align: middle;
+                height: 40px;
+                margin-right: @range-xs;
+            }
+        }
+        >.user {
+            display: inline-block;
+            width: 220px;
+            float: right;
+
+            >.info {
+                display: inline-block;
+                height: 55px;
+                padding-top: 15px;
+                color: #FFF;
+                margin-right: @range-xs;
+                >.avatar {
+                    vertical-align: middle;
+                    height: 40px;
+                }
+            }
+            >.el-dropdown {
+                background-color: rgba(255, 255, 255, 0.3);
+                border-radius: 3px;
+                width: 30px;
+                height: 30px;
+                float: right;
+                margin: 20px 20px 0px 0px;
+                text-align: center;
+                line-height: 30px;
+                color: #FFF;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+// 主体样式
+.page-container {
+    >.title {
+        font-size: 16px;
+        padding: 2px 10px;
+        margin: 4px 0px 14px;
+        border-left: @blue-light 4px solid;
+    }
+    >.body {
+        border: @color-border-gray 1px solid;
+        padding: 20px;
+        >.execute {
+            margin-bottom: 20px;
+        }
+        .el-table {
+            .el-button--mini {
+                padding: 4px 8px;
+            }
+        }
     }
 }

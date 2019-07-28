@@ -95,7 +95,7 @@ class UserController extends Controller {
 
         //status字段限定
         if ($request->has('info.status') 
-            && !isset(Group::MAP_STATUS[$request->input('info.status')])) {
+            && !isset(User::MAP_STATUS[$request->input('info.status')])) {
             throw new NormalException(611, 'info.status');
         }
         
@@ -134,7 +134,7 @@ class UserController extends Controller {
             //添加组信息
             $data = [];
             foreach($request->input('group_ids') as $groupId){
-                if (!Format::isInteger($group)) {
+                if (!Format::isInteger($groupId)) {
                     throw new NormalException(604, 'group_ids');
                 }
                 $data[] = [
@@ -142,10 +142,9 @@ class UserController extends Controller {
                     'group_id' => $groupId
                 ];
             }
-            if (empty($data)) {
-                throw new NormalException(610, 'group_ids');
+            if (!empty($data)) {
+                UserGroup::insert($data);
             }
-            UserGroup::insert($data);
 
             DB::commit();
         }catch(\Exception $E){

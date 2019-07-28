@@ -2,15 +2,30 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Login from '@/components/Login.vue'
+import Home from '@/components/Home.vue'
+import AuthUser from '@/components/auth/User.vue'
 
 Vue.use(Router);
 
 export default new Router({
     routes: [
         {
-            path: '/',
+            path: '/login',
             component: Login
+        }, {
+            path: '/',
+            component: Home,
+            children: [
+                {
+                    path: '/admin/auth/user/list',
+                    component: AuthUser
+                }
+            ]
         },
+        {
+            path: '*',
+            component: Home
+        }
         // {
         //     path: '/',
         //     component: resolve => require(['../components/common/Home.vue'], resolve),
