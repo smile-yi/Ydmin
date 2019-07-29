@@ -9,5 +9,5 @@
 export default {
 
     //后台地址
-    api_url : 'http://yesadmin.local.com/server',
+    api_url : 'http://api.ydmin.local.com/server',
 }
