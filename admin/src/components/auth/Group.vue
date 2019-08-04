@@ -59,7 +59,7 @@
         </div>
 
         <!-- 添加 -->
-        <el-dialog title='角色添加' :visible.sync='dialog.add' width='800px'>
+        <el-dialog title='角色添加' :visible.sync='dialog.add' width='700px'>
             <el-form :model='aItem' label-width='100px' label-position='right' :rules='rules'>
                 <el-form-item label='名称:' prop='name'>
                     <el-input v-model='aItem.name'></el-input>
@@ -76,7 +76,7 @@
         </el-dialog>
 
         <!-- 编辑 -->
-        <el-dialog title='角色编辑' :visible.sync='dialog.update' width='800px'>
+        <el-dialog title='角色编辑' :visible.sync='dialog.update' width='700px'>
             <el-form :model='nItem' label-width='100px' label-position='right' :rules='rules'>
                 <el-form-item label='名称:' prop='name'>
                     <el-input v-model='nItem.name'></el-input>
@@ -93,7 +93,7 @@
         </el-dialog>
 
         <!-- 授权 -->
-        <el-dialog title='角色授权' :visible.sync='dialog.rules' width='800px'>
+        <el-dialog title='角色授权' :visible.sync='dialog.rules' width='700px'>
             <el-scrollbar>
                 <el-checkbox-group v-model='rules_selected' style='height: 40vh;'>
                     <div class='box-rules first'>

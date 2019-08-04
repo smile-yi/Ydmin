@@ -1,11 +1,11 @@
 <template>
     <div class='util-menu'>
-        <el-menu class="el-menu-vertical-demo" router>
-            <el-submenu v-for='menu in menus' :key='menu.id' :index='"menu_"+menu.id'>
-                <template slot="title"><i class="fa fa-lock"></i><span>{{menu.name}}</span></template>
+        <el-menu class="el-menu-vertical-demo" router :unique-opened='true' :default-active='$route.path'>
+            <el-submenu v-for='menu in menus' :key='menu.id' :index='menu.url'>
+                <template slot="title"><i :class="menu.icon || 'fa fa-circle'"></i><span>{{menu.name}}</span></template>
                 <el-menu-item v-for='child in menu.childs' :key='child.id' 
-                    :index='"menu_"+child.id' 
-                    :route='{path: "/"+child.url}'>
+                    :index='child.url' 
+                    :route='{path: child.url}'>
                     <i class='fa fa-circle'></i>{{child.name}}
                 </el-menu-item>
             </el-submenu>
@@ -19,13 +19,12 @@ import Common from '@/common/Common'
 export default {
     data() {
         return {
-            menus: {}
+            menus: {},
         }
     }, 
     created() {
         var url= Request.createApi('/admin/menus')
         Request.get(url, res => {
-            console.log(res)
             this.menus  = res['list']
         })
     }

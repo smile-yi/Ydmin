@@ -109,10 +109,10 @@ class RuleController extends Controller {
             throw new NormalException(603, 'id|info');
         }
 
-        //若存在，不能为null
-        if (ArrTool::existNull($request->input('info'), ['name', 'url', 'status'])) {
-            throw new NormalException(610, 'info.name|info.url');
-        }
+        // //若存在，不能为null
+        // if (ArrTool::existNull($request->input('info'), ['name', 'url', 'status'])) {
+        //     throw new NormalException(610, 'info.name|info.url');
+        // }
 
         //status字段限定
         if ($request->has('info.status') 

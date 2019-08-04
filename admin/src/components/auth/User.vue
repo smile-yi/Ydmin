@@ -60,7 +60,7 @@
         </div>
 
         <!-- 添加 -->
-        <el-dialog title='用户添加' :visible.sync='dialog.add' width='800px'>
+        <el-dialog title='用户添加' :visible.sync='dialog.add' width='700px'>
             <el-form :model='aItem' label-width='100px' label-position='right' :rules='rules.user_add'>
                 <el-form-item label='用户名:' prop='username'>
                     <el-input v-model='aItem.username'></el-input>
@@ -77,7 +77,7 @@
         </el-dialog>
 
         <!-- 编辑 -->
-        <el-dialog title='用户编辑' :visible.sync='dialog.update' width='800px'>
+        <el-dialog title='用户编辑' :visible.sync='dialog.update' width='700px'>
             <el-form :model='nItem' label-width='100px' label-position='right' :rules='rules.user_update'>
                 <el-form-item label='用户名:'>
                     <el-input v-model='nItem.username' disabled></el-input>
@@ -103,7 +103,7 @@
         </el-dialog>
 
         <!-- 授权 -->
-        <el-dialog title='用户授权' :visible.sync='dialog.update_groups' width='800px'>
+        <el-dialog title='用户授权' :visible.sync='dialog.update_groups' width='700px'>
             <el-checkbox-group v-model='nUserGroups'>
                 <el-row>
                     <el-col :span='6' v-for='group in nGroups' :key='group.id'>

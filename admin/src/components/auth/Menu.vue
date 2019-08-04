@@ -7,96 +7,43 @@
                     <el-button type='primary' @click="dialog.add = true">添加</el-button>
                 </el-button-group>
             </div>
-            <div class='content list-menu-tree '>
-                <el-collapse>
-                    <el-collapse-item v-for='menu in list' :key='menu.id' label='ok'>
-                        <!-- 一级菜单 -->
-                        <template slot='title'>
-                            <el-row style='width:100%'>
-                                <el-col :span='6'>{{menu.name}}</el-col>
-                                <el-col :span='6'>{{menu.url}}</el-col>
-                                <el-col :span='6' class='align-center'>
-                                    <el-tag :type='menu.show == 1 ? "success" : "warning"' size='mini'>
-                                        {{['隐藏', '显示'][menu.is_menu]}}
-                                    </el-tag>
-                                </el-col>
-                                <el-col :span='5' class='float-right'>
-                                    <el-button-group class='float-right'>
-                                        <el-button size='mini' type='primary' 
-                                            @click.capture.stop='getItem(menu)'>
-                                            详情
-                                        </el-button>
-                                        <el-button size='mini' type='danger'
-                                            @click.capture.stop='updateItem(menu.id, {"status" : -1})'>
-                                            删除
-                                        </el-button>
-                                    </el-button-group>
-                                </el-col>
-                            </el-row>
-                        </template>
-                        <el-collapse>
-                            <div v-for='cmenu in menu.child' :key='cmenu.id'>
-                                <!-- 二级菜单 -->
-                                <el-collapse-item>
-                                    <template slot='title'>
-                                        <el-row>
-                                            <el-col :span='6'>|-----{{cmenu.name}}</el-col>
-                                            <el-col :span='6'>{{cmenu.url}}</el-col>
-                                            <el-col :span='6' class='align-center'>
-                                                <el-tag :type='cmenu.show == 1 ? "success" : "warning"' size='mini'>
-                                                    {{['隐藏', '显示'][cmenu.show]}}
-                                                </el-tag>
-                                            </el-col>
-                                            <el-col :span='5' class='float-right'>
-                                                <el-button-group class='float-right'>
-                                                    <el-button size='mini' type='primary' 
-                                                        @click.capture.stop='getItem(cmenu)'>
-                                                        详情
-                                                    </el-button>
-                                                    <el-button size='mini' type='danger'
-                                                        @click.capture.stop='updateItem(cmenu.id, {"status" : -1})'>
-                                                        删除
-                                                    </el-button>
-                                                </el-button-group>
-                                            </el-col>
-                                        </el-row>
-                                    </template>
-
-                                    <!-- 三级菜单 -->
-                                    <el-row class='menu-item' v-for='ccmenu in cmenu.child' 
-                                        :key='ccmenu.id'>
-                                        <i class='fa fa-circle-o'></i>
-                                        <el-col :span='6'>|-----|-----{{ccmenu.name}}</el-col>
-                                        <el-col :span='6'>{{ccmenu.url}}</el-col>
-                                        <el-col :span='6' class='align-center'>
-                                            <el-tag :type='ccmenu.show == 1 ? "success" : "warning"' 
-                                                size='mini'>
-                                                {{['隐藏', '显示'][ccmenu.show]}}
-                                            </el-tag>
-                                        </el-col>
-                                        <el-col :span='5' class='float-right'>
-                                            <el-button-group class='float-right'>
-                                                <el-button size='mini' type='primary' 
-                                                    @click.capture.stop='getItem(ccmenu)'>
-                                                    详情
-                                                </el-button>
-                                                <el-button size='mini' type='danger'
-                                                    @click.capture.stop='updateItem(ccmenu.id, {"status" : -1})'>
-                                                    删除
-                                                </el-button>
-                                            </el-button-group>
-                                        </el-col>
-                                    </el-row>
-                                </el-collapse-item>
-                            </div>
-                        </el-collapse>
-                    </el-collapse-item>
-                </el-collapse>
+            <div class='content tree-rule'>
+                <el-tree :data='list' :props='{children: "childs", label: "name", is_menu: "is_menu"}'>
+                    <el-row slot-scope="{node, data}" style='width: 100%' class='rule-item'>
+                        <el-col :span=6>{{data.name}}</el-col>
+                        <el-col :span=6>{{data.url}}</el-col>
+                        <el-col :span=6>
+                            <el-tag :type='data.is_menu == 1 ? "success" : "warning"' size='mini'>
+                                {{["隐藏", "展示"][data.is_menu]}}
+                            </el-tag>
+                        </el-col>
+                        <el-col :span=6>
+                            <el-button-group>
+                                <el-button size='mini' type='primary' 
+                                    @click.capture.stop='getItem(data)'>
+                                    详情
+                                </el-button>
+                                <el-button size='mini' type='success' v-if="data.status == 2"
+                                    @click.capture.stop='updateItem(data.id, {"status" : 1})'>
+                                    启用
+                                </el-button>
+                                <el-button size='mini' type='warning' v-if="data.status == 1"
+                                    @click.capture.stop='updateItem(data.id, {"status" : 2})'>
+                                    禁用
+                                </el-button>
+                                <el-button size='mini' type='danger'
+                                    @click.capture.stop='updateItem(data.id, {"status" : 9})'>
+                                    删除
+                                </el-button>
+                            </el-button-group>
+                        </el-col>
+                    </el-row>
+                </el-tree>
             </div>
         </div>
         
         <!-- 添加 -->
-        <el-dialog title='菜单添加' :visible.sync='dialog.add' width='800px'>
+        <el-dialog title='菜单添加' :visible.sync='dialog.add' width='700px'>
             <el-form :model='aItem' label-width='100px' label-position='right'>
                 <el-form-item label='父级:'>
                     <el-select v-model='aItem.pid'>
@@ -117,8 +64,8 @@
                     <el-input v-model='aItem.icon'></el-input>
                 </el-form-item>
                 <el-form-item label='显示:'>
-                    <el-radio v-model='aItem.show' label='1'>是</el-radio>
-                    <el-radio v-model='aItem.show' label='0'>否</el-radio>
+                    <el-radio v-model='aItem.is_menu' label='1'>是</el-radio>
+                    <el-radio v-model='aItem.is_menu' label='0'>否</el-radio>
                 </el-form-item>
             </el-form>
 
@@ -129,7 +76,7 @@
         </el-dialog>
 
         <!-- 编辑 -->
-        <el-dialog title='菜单编辑' :visible.sync='dialog.update' width='800px'>
+        <el-dialog title='菜单编辑' :visible.sync='dialog.update' width='700px'>
             <el-form :model='nItem' label-width='100px' label-position='right'>
                 <el-form-item label='父级:'>
                     <el-select v-model='nItem.pid'>
@@ -150,8 +97,8 @@
                     <el-input v-model='nItem.icon'></el-input>
                 </el-form-item>
                 <el-form-item label='显示:'>
-                    <el-radio v-model='nItem.show' label='1'>是</el-radio>
-                    <el-radio v-model='nItem.show' label='0'>否</el-radio>
+                    <el-radio v-model='nItem.is_menu' label='1'>是</el-radio>
+                    <el-radio v-model='nItem.is_menu' label='0'>否</el-radio>
                 </el-form-item>
             </el-form>
 
@@ -168,7 +115,7 @@ import Request from '@/common/Request'
 import Common from '@/common/Common'
 import Notify from '@/common/Notify'
 export default {
-    data    : function(){
+    data() {
         return {
             'list'  : [],
             'dialog': {
@@ -177,7 +124,7 @@ export default {
                 'rules' : false
             },
             'nItem' : {},
-            'aItem' : {'pid' : '0', 'show' : '1'},
+            'aItem' : {'pid' : '0', 'is_menu' : '1'},
             'rules' : [],
             'loading'   : false,
             'pid_options' : [{
@@ -186,14 +133,15 @@ export default {
             }]
         }
     },
-    created : function(){
+    created() {
         this.getList()
     },
-    methods : {
+    methods: {
         getList: function(){
-            var url = Request.createApi('/admin/auth/rule/list')
+            var url = Request.createApi('/admin/auth/rule/list?format=tree')
             Request.get(url, res => {
                 this.list = res.list
+                console.log(this.list)
                 this.loadPidOptions()
                 this.loading = false
             })
@@ -203,7 +151,7 @@ export default {
 
         getItem: function(item){
             this.nItem = item
-            this.nItem.show = String(item.show)
+            this.nItem.is_menu = String(item.is_menu)
             this.nItem.pid = String(item.pid)
             this.dialog.update = true;
         },
@@ -233,8 +181,12 @@ export default {
             })
         },
 
+        append(data, node) {
+            console.log(data, node)
+        },
+
         //加载父类菜单选项
-        loadPidOptions    : function(){
+        loadPidOptions: function(){
             this.pid_options    = this.getPidOptions(this.list, 1)
 
             this.pid_options.splice(0, 0, {
@@ -243,7 +195,7 @@ export default {
             })
         },
 
-        getPidOptions: function(list, level){
+        getPidOptions(list, level) {
             var pid_options = []
             var level = level || 1
 
@@ -254,8 +206,8 @@ export default {
                     'id' : String(menu.id)
                 })
 
-                if(menu.child){
-                    let childs  = this.getPidOptions(menu.child, level + 1)
+                if(menu.childs){
+                    let childs  = this.getPidOptions(menu.childs, level + 1)
                     for(let k in childs){
                         pid_options.push(childs[k])
                     }

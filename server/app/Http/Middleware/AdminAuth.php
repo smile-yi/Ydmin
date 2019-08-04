@@ -11,15 +11,15 @@ use SmileYi\Utils\Token;
 class AdminAuth
 {
     protected $noNeedLogin  = [
-        'admin/login',
+        '/admin/login',
     ];
 
     protected $noNeedAuth   = [
-        'admin/menus',
-        'admin/detail',
-        'admin/update',
-        'admin/upload',
-        'admin/logout'
+        '/admin/menus',
+        '/admin/detail',
+        '/admin/update',
+        '/admin/upload',
+        '/admin/logout'
     ];
 
     /**
@@ -31,8 +31,8 @@ class AdminAuth
      */
     public function handle($request, Closure $next)
     {  
-        $token = $request->header('authorized_token');
-        
+        // $token = $request->header('authorized_token');
+        $token = $request->get('token');
         if (\App::environment('local') and !$token) {
             $request->admin = User::where([
                 'id' => 1
@@ -48,7 +48,7 @@ class AdminAuth
         }
             
 
-        $path = $request->path();
+        $path = '/' . $request->path();
         //登录检测
         if(!in_array($path, $this->noNeedLogin) && (!$request->admin || $request->admin->status != 1)){
             throw new NormalException(601);
